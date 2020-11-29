@@ -1,4 +1,6 @@
-package com.astro.smitebasic.info;
+package com.astro.smitebasic.db.player;
+
+import com.astro.smitebasic.info.Info;
 
 public class PlayerInfo implements Info {
 

@@ -1,29 +1,21 @@
 package com.astro.smitebasic.api;
 
+import com.astro.smitebasic.db.Commands;
 import com.astro.smitebasic.db.session.SessionController;
-import com.astro.smitebasic.info.ConnectionInfo;
+import com.astro.smitebasic.api.session.SessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.cache.support.NullValue;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 
 @Component
 public class SmiteAPI implements CommandLineRunner {
-
-    @Autowired
-    private SessionController sessionController;
 
     @Value("${smite.api}")
     private String apiUri;
@@ -37,57 +29,64 @@ public class SmiteAPI implements CommandLineRunner {
     @Value("${smite.acc}")
     private String mainAcc;
 
-    public String makeTimeStamp() {
-        Instant instant = Instant.now();
-        DateTimeFormatter formatterUTC = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZoneId.of("UTC"));
-        return formatterUTC.format(instant);
-    }
+    @Autowired
+    private SessionController sessionController;
 
-    public String makeSignature(String time) throws NoSuchAlgorithmException {
-        String sig = devID + "createsession" + "D328B92A2C9A44FCB01854A300ACE310" + time;
-        MessageDigest md = MessageDigest.getInstance("MD5");
-        md.update((sig).getBytes());
+    @Autowired
+    private Commands commands;
 
-        byte[] signature = md.digest();
-        StringBuilder sb = new StringBuilder();
-        for (byte x : signature) {
-            sb.append(String.format("%02X", x).toLowerCase());
-        }
-
-        return sb.toString();
-    }
-
-    public String makeRequestUri(String... components) {
-        return String.join("/", components);
-    }
+    @Autowired
+    private Config config;
 
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
     }
 
-    public ConnectionInfo runAPI(RestTemplate template) throws Exception {
-        String timeStamp = makeTimeStamp();
-        String createSession = makeRequestUri(apiUri, "createsessionJson", devID, makeSignature(timeStamp), timeStamp);
-        ConnectionInfo currentInfo = template.getForObject(createSession, ConnectionInfo.class);
-        return currentInfo;
+    public SessionInfo createSession(RestTemplate template) throws Exception {
+        String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
+        String createSession = config.makeRequestUri(apiUri, "createsessionJson", devID, config.makeSignature("createsession", timeStamp, devID, authKey), timeStamp);
+        return template.getForObject(createSession, SessionInfo.class);
+    }
+
+    public String getPlayerInfo(RestTemplate template) throws Exception {
+        String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
+        String playerInfo = config.makeRequestUri(apiUri, "getplayerJson", devID, config.makeSignature("getplayer", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAcc);
+        String info = template.getForObject(playerInfo, String.class);
+        return info;
+    }
+
+    public String getSessionID() throws Exception {
+        String[] currentTimeStamp = config.makeTimeStamp("MM/dd/yyyy HH:mm:ss:a").split(" ");
+        for (SessionInfo connection : sessionController.getConnections()) {
+            if (config.verifySession(currentTimeStamp[0], currentTimeStamp[1], connection.getDate(), connection.getTime()))
+                return connection.getSession_id();
+        }
+        throw new Exception("Could not find a suitable session, please create a new one");
     }
 
     @Override
     public void run(String... args) throws Exception {
-        Iterable<ConnectionInfo> connectionInfos = sessionController.getConnections();
-        String testTimeStamp = makeTimeStamp();
-        for (ConnectionInfo connection : connectionInfos) {
-            System.out.println(connection.getTimestamp());
-            System.out.println(testTimeStamp);
+        Iterable<SessionInfo> allConnectionInfo = sessionController.getConnections();
+        String[] currentTimeStamp = config.makeTimeStamp("MM/dd/yyyy HH:mm:ss:a").split(" ");
+        String currentDate = currentTimeStamp[0];
+        String currentTime = currentTimeStamp[1];
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH);
-            Date test = format.parse(testTimeStamp);
-            Date old = format.parse(connection.getTimestamp());
-            System.out.println(Math.abs(test.getTime() - old.getTime()));
+        SessionInfo info = null;
 
+        for (SessionInfo connection : allConnectionInfo) {
+            if (config.verifySession(currentDate, currentTime, connection.getDate(), connection.getTime())) {
+                info = connection;
+                break;
+            }
+            sessionController.deleteConnection(connection);
         }
-//        ConnectionInfo info = runAPI(restTemplate(new RestTemplateBuilder()));
-//        System.out.println(info);
-//        sessionController.addConnection(info);
+
+        if (info == null) {
+            info = createSession(restTemplate(new RestTemplateBuilder()));
+            sessionController.addConnection(info);
+        }
+
+        String playerInfo = getPlayerInfo(restTemplate(new RestTemplateBuilder()));
+        System.out.println(playerInfo);
     }
 }

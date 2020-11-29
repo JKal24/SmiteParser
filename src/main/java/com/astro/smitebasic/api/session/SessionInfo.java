@@ -1,13 +1,15 @@
-package com.astro.smitebasic.info;
+package com.astro.smitebasic.api.session;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "session_info")
-public class ConnectionInfo {
+public class SessionInfo {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -17,11 +19,9 @@ public class ConnectionInfo {
     private String session_id;
     private String timestamp;
 
-    public ConnectionInfo() {
+    public SessionInfo() { }
 
-    }
-
-    public ConnectionInfo(String ret_msg, String session_id, String timestamp) {
+    public SessionInfo(String ret_msg, String session_id, String timestamp) {
         this.ret_msg = ret_msg;
         this.session_id = session_id;
         this.timestamp = timestamp;
@@ -53,6 +53,24 @@ public class ConnectionInfo {
 
     public String getTimestamp() {
         return timestamp;
+    }
+
+    public String getTime() {
+        Pattern pattern = Pattern.compile("([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2}).+");
+        Matcher matcher = pattern.matcher(timestamp);
+        while (matcher.find()) {
+            return matcher.group();
+        }
+        return "";
+    }
+
+    public String getDate() {
+        Pattern pattern = Pattern.compile("[0-9]{1,2}\\/[0-9]{1,2}\\/[0-9]{2,4}");
+        Matcher matcher = pattern.matcher(timestamp);
+        while (matcher.find()) {
+            return matcher.group();
+        }
+        return "";
     }
 
     public void setTimestamp(String timestamp) {
