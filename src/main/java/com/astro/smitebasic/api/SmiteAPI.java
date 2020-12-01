@@ -1,18 +1,15 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.db.Commands;
+import com.astro.smitebasic.db.player.PlayerController;
+import com.astro.smitebasic.db.player.PlayerInfo;
 import com.astro.smitebasic.db.session.SessionController;
-import com.astro.smitebasic.api.session.SessionInfo;
+import com.astro.smitebasic.db.session.SessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.cache.support.NullValue;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.security.NoSuchAlgorithmException;
 
 @Component
 public class SmiteAPI implements CommandLineRunner {
@@ -33,7 +30,7 @@ public class SmiteAPI implements CommandLineRunner {
     private SessionController sessionController;
 
     @Autowired
-    private Commands commands;
+    private PlayerController playerController;
 
     @Autowired
     private Config config;
@@ -48,10 +45,11 @@ public class SmiteAPI implements CommandLineRunner {
         return template.getForObject(createSession, SessionInfo.class);
     }
 
-    public String getPlayerInfo(RestTemplate template) throws Exception {
+    public PlayerInfo getPlayerInfo(RestTemplate template) throws Exception {
         String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
         String playerInfo = config.makeRequestUri(apiUri, "getplayerJson", devID, config.makeSignature("getplayer", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAcc);
-        String info = template.getForObject(playerInfo, String.class);
+        PlayerInfo info = template.getForObject(playerInfo, PlayerInfo.class);
+        System.out.println(info);
         return info;
     }
 
@@ -66,11 +64,11 @@ public class SmiteAPI implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Iterable<SessionInfo> allConnectionInfo = sessionController.getConnections();
         String[] currentTimeStamp = config.makeTimeStamp("MM/dd/yyyy HH:mm:ss:a").split(" ");
         String currentDate = currentTimeStamp[0];
         String currentTime = currentTimeStamp[1];
 
+        Iterable<SessionInfo> allConnectionInfo = sessionController.getConnections();
         SessionInfo info = null;
 
         for (SessionInfo connection : allConnectionInfo) {
@@ -86,7 +84,8 @@ public class SmiteAPI implements CommandLineRunner {
             sessionController.addConnection(info);
         }
 
-        String playerInfo = getPlayerInfo(restTemplate(new RestTemplateBuilder()));
-        System.out.println(playerInfo);
+//        PlayerInfo playerInfo = getPlayerInfo(restTemplate(new RestTemplateBuilder()));
+//        playerController.addConnection(playerInfo);
+//        System.out.println(playerInfo.toString());
     }
 }

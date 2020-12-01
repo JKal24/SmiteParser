@@ -1,4 +1,4 @@
-package com.astro.smitebasic.api.session;
+package com.astro.smitebasic.db.session;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

@@ -1,6 +1,5 @@
 package com.astro.smitebasic.db.session;
 
-import com.astro.smitebasic.api.session.SessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -8,17 +7,15 @@ import org.springframework.stereotype.Component;
 public class SessionController {
 
     @Autowired
-    private SessionRepository sessionRepository;
+    private SessionRepository repository;
 
-    public String addConnection(SessionInfo info) {
-        sessionRepository.save(info);
-        System.out.println("Saved");
-        return "Saved";
+    public void addConnection(SessionInfo info) {
+        repository.save(info);
     }
 
     public Iterable<SessionInfo> getConnections() {
-        return sessionRepository.findAll();
+        return repository.findAll();
     }
 
-    public void deleteConnection(SessionInfo info) { sessionRepository.delete(info); }
+    public void deleteConnection(SessionInfo info) { repository.delete(info); }
 }
