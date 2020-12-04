@@ -1,8 +1,6 @@
-package com.astro.smitebasic.db.player;
+package com.astro.smitebasic.db.player.ranked;
 
-import java.io.Serializable;
-
-public class GameModeData implements Serializable {
+public class ConquestData implements GameModeData {
     private Integer Leaves;
     private Integer Losses;
     private String Name;
@@ -18,9 +16,9 @@ public class GameModeData implements Serializable {
     private String player_id;
     private String ret_msg;
 
-    public GameModeData() { }
+    public ConquestData() { }
 
-    public GameModeData(Integer leaves, Integer losses, String name, Integer points, Integer prevRank, Integer rank, Integer rank_Stat,
+    public ConquestData(Integer leaves, Integer losses, String name, Integer points, Integer prevRank, Integer rank, Integer rank_Stat,
                         Integer rank_Variance, Integer season, Integer tier, Integer trend, Integer wins, String player_id, String ret_msg)
     {
         Leaves = leaves;
@@ -149,25 +147,5 @@ public class GameModeData implements Serializable {
 
     public void setRet_msg(String ret_msg) {
         this.ret_msg = ret_msg;
-    }
-
-    @Override
-    public String toString() {
-        return "GameModeData{" +
-                "Leaves=" + Leaves +
-                ", Losses=" + Losses +
-                ", Name='" + Name + '\'' +
-                ", Points=" + Points +
-                ", PrevRank=" + PrevRank +
-                ", Rank=" + Rank +
-                ", Rank_Stat=" + Rank_Stat +
-                ", Rank_Variance=" + Rank_Variance +
-                ", Season=" + Season +
-                ", Tier=" + Tier +
-                ", Trend=" + Trend +
-                ", Wins=" + Wins +
-                ", player_id='" + player_id + '\'' +
-                ", ret_msg='" + ret_msg + '\'' +
-                '}';
     }
 }

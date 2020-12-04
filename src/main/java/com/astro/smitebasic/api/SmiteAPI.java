@@ -4,6 +4,7 @@ import com.astro.smitebasic.db.player.PlayerController;
 import com.astro.smitebasic.db.player.PlayerInfo;
 import com.astro.smitebasic.db.session.SessionController;
 import com.astro.smitebasic.db.session.SessionInfo;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -48,9 +49,16 @@ public class SmiteAPI implements CommandLineRunner {
     public PlayerInfo getPlayerInfo(RestTemplate template) throws Exception {
         String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
         String playerInfo = config.makeRequestUri(apiUri, "getplayerJson", devID, config.makeSignature("getplayer", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAcc);
-        PlayerInfo info = template.getForObject(playerInfo, PlayerInfo.class);
+//        PlayerInfo info = template.getForObject(playerInfo, PlayerInfo.class);
+//        System.out.println(info);
+
+        String info = template.getForObject(playerInfo, String.class);
+        PlayerInfo info1 = template.getForObject(playerInfo, PlayerInfo.class);
+        JSONParser parser = new JSONParser(info);
+
+        System.out.println(parser.parse());
         System.out.println(info);
-        return info;
+        return info1;
     }
 
     public String getSessionID() throws Exception {
@@ -84,8 +92,8 @@ public class SmiteAPI implements CommandLineRunner {
             sessionController.addConnection(info);
         }
 
-//        PlayerInfo playerInfo = getPlayerInfo(restTemplate(new RestTemplateBuilder()));
+        PlayerInfo playerInfo = getPlayerInfo(restTemplate(new RestTemplateBuilder()));
 //        playerController.addConnection(playerInfo);
-//        System.out.println(playerInfo.toString());
+        System.out.println(playerInfo.toString());
     }
 }

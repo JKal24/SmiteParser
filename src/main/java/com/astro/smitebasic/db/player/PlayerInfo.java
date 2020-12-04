@@ -1,5 +1,6 @@
 package com.astro.smitebasic.db.player;
 
+import com.astro.smitebasic.db.player.ranked.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -18,7 +19,7 @@ public class PlayerInfo {
     private String Last_Login_Datetime;
     private Integer Leaves;
 
-    @Column(name = "Player_Level")
+    @Column(name = "player_level")
     private Integer Level;
     private Integer Losses;
     private Integer MasteryLevel;
@@ -33,18 +34,12 @@ public class PlayerInfo {
     private Integer Rank_Stat_duel_Controller;
     private Integer Rank_Stat_Joust;
     private Integer Rank_Stat_Joust_Controller;
-    @Transient
-    private GameModeData RankedConquest;
-    @Transient
-    private GameModeData RankedConquestController;
-    @Transient
-    private GameModeData RankedDuel;
-    @Transient
-    private GameModeData RankedDuelController;
-    @Transient
-    private GameModeData RankedJoust;
-    @Transient
-    private GameModeData RankedJoustController;
+    private ConquestData RankedConquest;
+    private ConquestControllerData RankedConquestController;
+    private DuelData RankedDuel;
+    private DuelControllerData RankedDuelController;
+    private JoustData RankedJoust;
+    private JoustControllerData RankedJoustController;
     private String Region;
     private Integer TeamId;
     private String Team_Name;
@@ -60,11 +55,14 @@ public class PlayerInfo {
 
     public PlayerInfo() { }
 
-    public PlayerInfo(Integer id, String activePlayerId, String created_Datetime, Integer hoursPlayed, String last_Login_Datetime, Integer leaves, Integer level, Integer losses, Integer masteryLevel, String mergedPlayers, Integer minutesPlayed, String name,
-                      String personal_Status_Message, String platform, Integer rank_Stat_Conquest, Integer rank_Stat_Conquest_Controller, Integer rank_Stat_Duel, Integer rank_Stat_duel_Controller, Integer rank_Stat_Joust, Integer rank_Stat_Joust_Controller,
-                      GameModeData rankedConquest, GameModeData rankedConquestController, GameModeData rankedDuel, GameModeData rankedDuelController, GameModeData rankedJoust, GameModeData rankedJoustController, String region, Integer teamId, String team_Name,
-                      Integer tier_Conquest, Integer tier_Duel, Integer tier_Joust, Integer total_Achievements, Integer total_Worshippers, Integer wins, String hz_gamer_tag, String hz_player_name, String ret_msg)
-    {
+    public PlayerInfo(Integer id, String activePlayerId, String created_Datetime, Integer hoursPlayed, String last_Login_Datetime,
+                      Integer leaves, Integer level, Integer losses, Integer masteryLevel, String mergedPlayers, Integer minutesPlayed,
+                      String name, String personal_Status_Message, String platform, Integer rank_Stat_Conquest, Integer rank_Stat_Conquest_Controller,
+                      Integer rank_Stat_Duel, Integer rank_Stat_duel_Controller, Integer rank_Stat_Joust, Integer rank_Stat_Joust_Controller,
+                      ConquestData rankedConquest, ConquestControllerData rankedConquestController, DuelData rankedDuel, DuelControllerData rankedDuelController,
+                      JoustData rankedJoust, JoustControllerData rankedJoustController, String region, Integer teamId, String team_Name, Integer tier_Conquest,
+                      Integer tier_Duel, Integer tier_Joust, Integer total_Achievements, Integer total_Worshippers, Integer wins, String hz_gamer_tag,
+                      String hz_player_name, String ret_msg) {
         this.id = id;
         ActivePlayerId = activePlayerId;
         Created_Datetime = created_Datetime;
@@ -266,54 +264,6 @@ public class PlayerInfo {
         Rank_Stat_Joust_Controller = rank_Stat_Joust_Controller;
     }
 
-    public GameModeData getRankedConquest() {
-        return RankedConquest;
-    }
-
-    public void setRankedConquest(GameModeData rankedConquest) {
-        RankedConquest = rankedConquest;
-    }
-
-    public GameModeData getRankedConquestController() {
-        return RankedConquestController;
-    }
-
-    public void setRankedConquestController(GameModeData rankedConquestController) {
-        RankedConquestController = rankedConquestController;
-    }
-
-    public GameModeData getRankedDuel() {
-        return RankedDuel;
-    }
-
-    public void setRankedDuel(GameModeData rankedDuel) {
-        RankedDuel = rankedDuel;
-    }
-
-    public GameModeData getRankedDuelController() {
-        return RankedDuelController;
-    }
-
-    public void setRankedDuelController(GameModeData rankedDuelController) {
-        RankedDuelController = rankedDuelController;
-    }
-
-    public GameModeData getRankedJoust() {
-        return RankedJoust;
-    }
-
-    public void setRankedJoust(GameModeData rankedJoust) {
-        RankedJoust = rankedJoust;
-    }
-
-    public GameModeData getRankedJoustController() {
-        return RankedJoustController;
-    }
-
-    public void setRankedJoustController(GameModeData rankedJoustController) {
-        RankedJoustController = rankedJoustController;
-    }
-
     public String getRegion() {
         return Region;
     }
@@ -408,6 +358,54 @@ public class PlayerInfo {
 
     public void setRet_msg(String ret_msg) {
         this.ret_msg = ret_msg;
+    }
+
+    public ConquestData getRankedConquest() {
+        return RankedConquest;
+    }
+
+    public void setRankedConquest(ConquestData rankedConquest) {
+        RankedConquest = rankedConquest;
+    }
+
+    public ConquestControllerData getRankedConquestController() {
+        return RankedConquestController;
+    }
+
+    public void setRankedConquestController(ConquestControllerData rankedConquestController) {
+        RankedConquestController = rankedConquestController;
+    }
+
+    public DuelData getRankedDuel() {
+        return RankedDuel;
+    }
+
+    public void setRankedDuel(DuelData rankedDuel) {
+        RankedDuel = rankedDuel;
+    }
+
+    public DuelControllerData getRankedDuelController() {
+        return RankedDuelController;
+    }
+
+    public void setRankedDuelController(DuelControllerData rankedDuelController) {
+        RankedDuelController = rankedDuelController;
+    }
+
+    public JoustData getRankedJoust() {
+        return RankedJoust;
+    }
+
+    public void setRankedJoust(JoustData rankedJoust) {
+        RankedJoust = rankedJoust;
+    }
+
+    public JoustControllerData getRankedJoustController() {
+        return RankedJoustController;
+    }
+
+    public void setRankedJoustController(JoustControllerData rankedJoustController) {
+        RankedJoustController = rankedJoustController;
     }
 
     @Override

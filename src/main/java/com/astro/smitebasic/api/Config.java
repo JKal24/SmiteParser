@@ -62,7 +62,7 @@ public class Config {
             compareMinutes += 15;
         } else {
             compareMinutes = (compareMinutes + 15) % 60;
-            compareHours = compareHours == 12 ? 1 : compareHours + 1;
+            compareHours = compareHours >= 12 ? compareHours % 12 : compareHours + 1;
         }
 
         // Compares hours, must be equal after changes and AM or PM
