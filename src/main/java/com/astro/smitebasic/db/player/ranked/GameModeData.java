@@ -1,61 +1,71 @@
 package com.astro.smitebasic.db.player.ranked;
 
- interface GameModeData {
+import com.astro.smitebasic.db.player.PlayerInfo;
 
-     Integer getLeaves();
+interface GameModeData {
 
-     void setLeaves(Integer leaves);
+    Integer getId();
 
-     Integer getLosses();
+    void setId(Integer id);
 
-     void setLosses(Integer losses);
+    String getLeaves();
 
-     String getName();
+    void setLeaves(String leaves);
 
-     void setName(String name);
+    String getLosses();
 
-     Integer getPoints();
+    void setLosses(String losses);
 
-     void setPoints(Integer points);
+    String getName();
 
-     Integer getPrevRank();
+    void setName(String name);
 
-     void setPrevRank(Integer prevRank);
+    String getPoints();
 
-     Integer getRank();
+    void setPoints(String points);
 
-     void setRank(Integer rank);
+    String getPrevRank();
 
-     Integer getRank_Stat();
+    void setPrevRank(String prevRank);
 
-     void setRank_Stat(Integer rank_Stat);
+    String getRank();
 
-     Integer getRank_Variance();
+    void setRank(String rank);
 
-     void setRank_Variance(Integer rank_Variance);
+    String getRank_Stat();
 
-     Integer getSeason();
+    void setRank_Stat(String rank_Stat);
 
-     void setSeason(Integer season);
+    String getRank_Variance();
 
-     Integer getTier();
+    void setRank_Variance(String rank_Variance);
 
-     void setTier(Integer tier);
+    String getSeason();
 
-     Integer getTrend();
+    void setSeason(String season);
 
-     void setTrend(Integer trend);
+    String getTier();
 
-     Integer getWins();
+    void setTier(String tier);
 
-     void setWins(Integer wins);
+    String getTrend();
 
-     String getPlayer_id();
+    void setTrend(String trend);
 
-     void setPlayer_id(String player_id);
+    String getWins();
 
-     String getRet_msg();
+    void setWins(String wins);
 
-     void setRet_msg(String ret_msg);
+    String getPlayer_id();
+
+    void setPlayer_id(String player_id);
+
+    String getRet_msg();
+
+    void setRet_msg(String ret_msg);
+
+    PlayerInfo getInfo();
+
+    void setInfo(PlayerInfo info);
 
 }

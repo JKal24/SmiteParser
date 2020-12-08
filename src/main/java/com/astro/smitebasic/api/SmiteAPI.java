@@ -2,6 +2,7 @@ package com.astro.smitebasic.api;
 
 import com.astro.smitebasic.db.player.PlayerController;
 import com.astro.smitebasic.db.player.PlayerInfo;
+import com.astro.smitebasic.db.player.friends.FriendsInfo;
 import com.astro.smitebasic.db.session.SessionController;
 import com.astro.smitebasic.db.session.SessionInfo;
 import org.apache.tomcat.util.json.JSONParser;
@@ -25,7 +26,7 @@ public class SmiteAPI implements CommandLineRunner {
     private String authKey;
 
     @Value("${smite.acc}")
-    private String mainAcc;
+    private String mainAccName;
 
     @Autowired
     private SessionController sessionController;
@@ -43,22 +44,8 @@ public class SmiteAPI implements CommandLineRunner {
     public SessionInfo createSession(RestTemplate template) throws Exception {
         String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
         String createSession = config.makeRequestUri(apiUri, "createsessionJson", devID, config.makeSignature("createsession", timeStamp, devID, authKey), timeStamp);
+        String sessionInfo = template.getForObject(createSession, String.class);
         return template.getForObject(createSession, SessionInfo.class);
-    }
-
-    public PlayerInfo getPlayerInfo(RestTemplate template) throws Exception {
-        String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
-        String playerInfo = config.makeRequestUri(apiUri, "getplayerJson", devID, config.makeSignature("getplayer", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAcc);
-//        PlayerInfo info = template.getForObject(playerInfo, PlayerInfo.class);
-//        System.out.println(info);
-
-        String info = template.getForObject(playerInfo, String.class);
-        PlayerInfo info1 = template.getForObject(playerInfo, PlayerInfo.class);
-        JSONParser parser = new JSONParser(info);
-
-        System.out.println(parser.parse());
-        System.out.println(info);
-        return info1;
     }
 
     public String getSessionID() throws Exception {
@@ -67,33 +54,41 @@ public class SmiteAPI implements CommandLineRunner {
             if (config.verifySession(currentTimeStamp[0], currentTimeStamp[1], connection.getDate(), connection.getTime()))
                 return connection.getSession_id();
         }
-        throw new Exception("Could not find a suitable session, please create a new one");
+
+        SessionInfo info = createSession(restTemplate(new RestTemplateBuilder()));
+        sessionController.addConnection(info);
+        return info.getSession_id();
+    }
+
+    public PlayerInfo[] getPlayerInfo(RestTemplate template) throws Exception {
+        String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
+        String playerInfo = config.makeRequestUri(apiUri, "getplayerJson", devID, config.makeSignature("getplayer", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAccName);
+        return template.getForObject(playerInfo, PlayerInfo[].class);
     }
 
     @Override
     public void run(String... args) throws Exception {
-        String[] currentTimeStamp = config.makeTimeStamp("MM/dd/yyyy HH:mm:ss:a").split(" ");
-        String currentDate = currentTimeStamp[0];
-        String currentTime = currentTimeStamp[1];
+        RestTemplate template = restTemplate(new RestTemplateBuilder());
+        String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
 
-        Iterable<SessionInfo> allConnectionInfo = sessionController.getConnections();
-        SessionInfo info = null;
+        String friendsInfoRequest = config.makeRequestUri(apiUri, "getplayeridbynameJson", devID, config.makeSignature("getplayeridbyname", timeStamp, devID, authKey),
+                getSessionID(), timeStamp, mainAccName);
 
-        for (SessionInfo connection : allConnectionInfo) {
-            if (config.verifySession(currentDate, currentTime, connection.getDate(), connection.getTime())) {
-                info = connection;
-                break;
-            }
-            sessionController.deleteConnection(connection);
+        String friendsInfoString = template.getForObject(friendsInfoRequest, String.class);
+        FriendsInfo[] friendsInfo = template.getForObject(friendsInfoRequest, FriendsInfo[].class);
+        for (FriendsInfo info : friendsInfo) {
+            System.out.println(info);
+        }
+        System.out.println(friendsInfoString);
+
+        PlayerInfo[] playerInfo = getPlayerInfo(restTemplate(new RestTemplateBuilder()));
+        for (PlayerInfo info : playerInfo) {
+            playerController.addConnection(info);
+            System.out.println(info);
         }
 
-        if (info == null) {
-            info = createSession(restTemplate(new RestTemplateBuilder()));
-            sessionController.addConnection(info);
-        }
-
-        PlayerInfo playerInfo = getPlayerInfo(restTemplate(new RestTemplateBuilder()));
-//        playerController.addConnection(playerInfo);
-        System.out.println(playerInfo.toString());
+        String playerInfoRequest = config.makeRequestUri(apiUri, "getplayerJson", devID, config.makeSignature("getplayer", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAccName);
+        String playerInfoString = template.getForObject(playerInfoRequest, String.class);
+        System.out.println(playerInfoString);
     }
 }
