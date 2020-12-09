@@ -11,6 +11,14 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class Config {
 
+    public String makeAPITimeStamp() {
+        return makeTimeStamp("yyyyMMddHHmmss");
+    }
+
+    public String makeSignatureTimeStamp() {
+        return makeTimeStamp("MM/dd/yyyy HH:mm:ss:a");
+    }
+
     public String makeTimeStamp(String format) {
         Instant instant = Instant.now();
         DateTimeFormatter formatterUTC = DateTimeFormatter.ofPattern(format).withZone(ZoneId.of("UTC"));

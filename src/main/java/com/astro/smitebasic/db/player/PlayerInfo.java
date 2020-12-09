@@ -1,6 +1,7 @@
 package com.astro.smitebasic.db.player;
 
 import com.astro.smitebasic.db.player.ranked.*;
+import com.astro.smitebasic.smite.Info;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "player_info")
-public class PlayerInfo {
+public class PlayerInfo extends Info {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -130,9 +131,6 @@ public class PlayerInfo {
     @JsonProperty("hz_player_name")
     private String hz_player_name;
 
-    @JsonProperty("ret_msg")
-    private String ret_msg;
-
     public PlayerInfo() { }
 
     public PlayerInfo(Integer id, String activePlayerId, String created_Datetime, String hoursPlayed, String last_Login_Datetime,
@@ -143,6 +141,7 @@ public class PlayerInfo {
                       DuelData rankedDuel, DuelControllerData rankedDuelController, JoustData rankedJoust, JoustControllerData rankedJoustController,
                       String region, String teamId, String team_Name, String tier_Conquest, String tier_Duel, String tier_Joust,
                       String total_Achievements, String total_Worshippers, String wins, String hz_gamer_tag, String hz_player_name, String ret_msg) {
+        super(ret_msg);
         this.id = id;
         ActivePlayerId = activePlayerId;
         Created_Datetime = created_Datetime;
@@ -180,7 +179,6 @@ public class PlayerInfo {
         Wins = wins;
         this.hz_gamer_tag = hz_gamer_tag;
         this.hz_player_name = hz_player_name;
-        this.ret_msg = ret_msg;
     }
 
     public Integer getId() {
@@ -479,13 +477,9 @@ public class PlayerInfo {
         this.hz_player_name = hz_player_name;
     }
 
-    public String getRet_msg() {
-        return ret_msg;
-    }
+    public String getRet_msg() { return super.ret_msg; }
 
-    public void setRet_msg(String ret_msg) {
-        this.ret_msg = ret_msg;
-    }
+    public void setRet_msg(String ret_msg) { super.ret_msg = ret_msg; }
 
     @Override
     public String toString() {

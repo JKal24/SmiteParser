@@ -1,5 +1,6 @@
 package com.astro.smitebasic.db.session;
 
+import com.astro.smitebasic.smite.Info;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.regex.Pattern;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "session_info")
-public class SessionInfo {
+public class SessionInfo extends Info {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)

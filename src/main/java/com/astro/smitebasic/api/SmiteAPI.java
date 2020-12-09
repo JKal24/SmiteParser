@@ -13,6 +13,9 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.Objects;
+
 @Component
 public class SmiteAPI implements CommandLineRunner {
 
@@ -41,15 +44,23 @@ public class SmiteAPI implements CommandLineRunner {
         return builder.build();
     }
 
-    public SessionInfo createSession(RestTemplate template) throws Exception {
-        String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
-        String createSession = config.makeRequestUri(apiUri, "createsessionJson", devID, config.makeSignature("createsession", timeStamp, devID, authKey), timeStamp);
-        String sessionInfo = template.getForObject(createSession, String.class);
-        return template.getForObject(createSession, SessionInfo.class);
+    public String ping(RestTemplate template) throws NoSuchAlgorithmException {
+        String timeStamp = config.makeAPITimeStamp();
+        String pingRequest = config.makeRequestUri(apiUri, "pingJson");
+
+        return template.getForObject(pingRequest, String.class);
     }
 
-    public String getSessionID() throws Exception {
-        String[] currentTimeStamp = config.makeTimeStamp("MM/dd/yyyy HH:mm:ss:a").split(" ");
+    public SessionInfo createSession(RestTemplate template) throws NoSuchAlgorithmException {
+        String timeStamp = config.makeAPITimeStamp();
+        String createSessionRequest = config.makeRequestUri(apiUri, "createsessionJson", devID,
+                config.makeSignature("createsession", timeStamp, devID, authKey), timeStamp);
+
+        return template.getForObject(createSessionRequest, SessionInfo.class);
+    }
+
+    public String getSessionID() throws NoSuchAlgorithmException {
+        String[] currentTimeStamp = config.makeSignatureTimeStamp().split(" ");
         for (SessionInfo connection : sessionController.getConnections()) {
             if (config.verifySession(currentTimeStamp[0], currentTimeStamp[1], connection.getDate(), connection.getTime()))
                 return connection.getSession_id();
@@ -60,35 +71,26 @@ public class SmiteAPI implements CommandLineRunner {
         return info.getSession_id();
     }
 
-    public PlayerInfo[] getPlayerInfo(RestTemplate template) throws Exception {
-        String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
-        String playerInfo = config.makeRequestUri(apiUri, "getplayerJson", devID, config.makeSignature("getplayer", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAccName);
-        return template.getForObject(playerInfo, PlayerInfo[].class);
+    public PlayerInfo getPlayerInfo(RestTemplate template) throws NoSuchAlgorithmException {
+        String timeStamp = config.makeAPITimeStamp();
+        String playerInfoRequest = config.makeRequestUri(apiUri, "getplayerJson", devID,
+                config.makeSignature("getplayer", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAccName);
+
+        return (Objects.requireNonNull(template.getForObject(playerInfoRequest, PlayerInfo[].class)))[0];
+    }
+
+    public FriendsInfo getFriendsInfo(RestTemplate template) throws NoSuchAlgorithmException {
+        String timeStamp = config.makeAPITimeStamp();
+        String friendsInfoRequest = config.makeRequestUri(apiUri, "getplayeridbynameJson", devID,
+                config.makeSignature("getplayeridbyname", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAccName);
+
+        return (Objects.requireNonNull(template.getForObject(friendsInfoRequest, FriendsInfo[].class)))[0];
     }
 
     @Override
     public void run(String... args) throws Exception {
         RestTemplate template = restTemplate(new RestTemplateBuilder());
-        String timeStamp = config.makeTimeStamp("yyyyMMddHHmmss");
+        String timeStamp = config.makeAPITimeStamp();
 
-        String friendsInfoRequest = config.makeRequestUri(apiUri, "getplayeridbynameJson", devID, config.makeSignature("getplayeridbyname", timeStamp, devID, authKey),
-                getSessionID(), timeStamp, mainAccName);
-
-        String friendsInfoString = template.getForObject(friendsInfoRequest, String.class);
-        FriendsInfo[] friendsInfo = template.getForObject(friendsInfoRequest, FriendsInfo[].class);
-        for (FriendsInfo info : friendsInfo) {
-            System.out.println(info);
-        }
-        System.out.println(friendsInfoString);
-
-        PlayerInfo[] playerInfo = getPlayerInfo(restTemplate(new RestTemplateBuilder()));
-        for (PlayerInfo info : playerInfo) {
-            playerController.addConnection(info);
-            System.out.println(info);
-        }
-
-        String playerInfoRequest = config.makeRequestUri(apiUri, "getplayerJson", devID, config.makeSignature("getplayer", timeStamp, devID, authKey), getSessionID(), timeStamp, mainAccName);
-        String playerInfoString = template.getForObject(playerInfoRequest, String.class);
-        System.out.println(playerInfoString);
     }
 }
