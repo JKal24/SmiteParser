@@ -252,8 +252,7 @@ public class ConquestData implements GameModeData {
     @Override
     public String toString() {
         return "ConquestData{" +
-                "id=" + id +
-                ", Leaves=" + Leaves +
+                " Leaves=" + Leaves +
                 ", Losses=" + Losses +
                 ", Name='" + Name + '\'' +
                 ", Points=" + Points +

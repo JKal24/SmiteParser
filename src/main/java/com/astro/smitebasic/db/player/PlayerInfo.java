@@ -484,8 +484,7 @@ public class PlayerInfo extends Info {
     @Override
     public String toString() {
         return "PlayerInfo{" +
-                "id=" + id +
-                ", ActivePlayerId='" + ActivePlayerId + '\'' +
+                " ActivePlayerId='" + ActivePlayerId + '\'' +
                 ", Created_Datetime='" + Created_Datetime + '\'' +
                 ", HoursPlayed='" + HoursPlayed + '\'' +
                 ", Last_Login_Datetime='" + Last_Login_Datetime + '\'' +

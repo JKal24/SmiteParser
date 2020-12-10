@@ -223,8 +223,7 @@ public class DuelData implements GameModeData {
     @Override
     public String toString() {
         return "DuelData{" +
-                "id=" + id +
-                ", Leaves=" + Leaves +
+                " Leaves=" + Leaves +
                 ", Losses=" + Losses +
                 ", Name='" + Name + '\'' +
                 ", Points=" + Points +

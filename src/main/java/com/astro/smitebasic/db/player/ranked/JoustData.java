@@ -223,8 +223,7 @@ public class JoustData implements GameModeData {
     @Override
     public String toString() {
         return "JoustData{" +
-                "id=" + id +
-                ", Leaves=" + Leaves +
+                " Leaves=" + Leaves +
                 ", Losses=" + Losses +
                 ", Name='" + Name + '\'' +
                 ", Points=" + Points +

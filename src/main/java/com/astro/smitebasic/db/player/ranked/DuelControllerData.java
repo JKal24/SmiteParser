@@ -223,8 +223,7 @@ public class DuelControllerData implements GameModeData {
     @Override
     public String toString() {
         return "DuelControllerData{" +
-                "id=" + id +
-                ", Leaves=" + Leaves +
+                " Leaves=" + Leaves +
                 ", Losses=" + Losses +
                 ", Name='" + Name + '\'' +
                 ", Points=" + Points +
