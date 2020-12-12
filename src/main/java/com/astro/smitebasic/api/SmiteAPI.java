@@ -1,7 +1,7 @@
 package com.astro.smitebasic.api;
 
+import com.astro.smitebasic.db.Queries;
 import com.astro.smitebasic.db.player.PlayerInfo;
-import com.astro.smitebasic.db.session.SessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -20,25 +20,32 @@ public class SmiteAPI implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        PlayerInfo[] info = commands.makeRequestCall(PlayerInfo[].class,"getplayer", mainAccName);
-
-        for (PlayerInfo player : info) {
-            System.out.println(player);
-        }
-
-        String ping = commands.ping();
+        System.out.println(getPlayer(mainAccName));
+        System.out.println();
+        System.out.println(getAPIStatus());
+        System.out.println();
+        System.out.println(getSessionStatus());
+        System.out.println();
+        System.out.println(getDataUsed());
+        System.out.println();
+        System.out.println(getServerStatus());
+        System.out.println();
+        System.out.println(getPatchInfo());
 
     }
 
-    public String getStatus() {
+    public String getAPIStatus() {
         return commands.ping();
     }
 
-    public PlayerInfo getPlayer(String name) throws NoSuchAlgorithmException {
-        return commands.makeRequestCall(PlayerInfo[].class, "getplayer", mainAccName)[0];
-    }
+    public String getSessionStatus() throws NoSuchAlgorithmException { return commands.makeRequestCall(String.class, "testsession"); }
 
+    public String getDataUsed() throws NoSuchAlgorithmException { return commands.makeRequestCall(String.class, "getdataused"); }
 
+    public String getServerStatus() throws NoSuchAlgorithmException { return commands.makeRequestCall(String.class, "gethirezserverstatus"); }
 
+    public String getPatchInfo() throws NoSuchAlgorithmException { return commands.makeRequestCall(String.class, "getpatchinfo"); }
+
+    public PlayerInfo getPlayer(String name) throws NoSuchAlgorithmException { return commands.makeRequestCall(PlayerInfo[].class,"getplayer", mainAccName)[0]; }
 
 }

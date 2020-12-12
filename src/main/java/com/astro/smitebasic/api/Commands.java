@@ -1,8 +1,10 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.db.player.PlayerController;
+import com.astro.smitebasic.db.Controller;
+import com.astro.smitebasic.db.Queries;
 import com.astro.smitebasic.db.session.SessionController;
 import com.astro.smitebasic.db.session.SessionInfo;
+import com.astro.smitebasic.smite.Info;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -30,10 +32,10 @@ public class Commands {
     private Config config;
 
     @Autowired
-    private SessionController sessionController;
+    private Queries queries;
 
     @Autowired
-    private PlayerController playerController;
+    private SessionController sessionController;
 
     private final Logger LOGGER = Logger.getLogger(Commands.class.getName());
 
@@ -41,11 +43,7 @@ public class Commands {
         return builder.build();
     }
 
-    /**
-     * Checks to see if access to the API database is valid
-     * @return Sends a status message
-     * @throws NoSuchAlgorithmException
-     */
+     // Checks to see if access to the API database is valid
     public String ping() {
         try {
             String pingRequest = config.makeRequestUri(apiUri, "pingJson");
@@ -57,27 +55,7 @@ public class Commands {
         }
     }
 
-    /**
-     * Can make any standard API request call
-     * @param responseType
-     * Must be sent as an array of an info POJO
-     * @param request
-     * Type of request
-     * @param <T>
-     * The info POJO
-     * @return
-     * @throws NoSuchAlgorithmException
-     */
-    public <T> T makeRequestCall(Class<T> responseType, String request, String... additionalParams) throws NoSuchAlgorithmException {
-        String timestamp = config.makeAPITimeStamp();
-        String[] initialData = {apiUri, request + "json", devID, config.makeSignature(request, timestamp, devID, authKey), getSessionID(), timestamp};
-        String[] requestData = Stream.concat(Arrays.stream(initialData), Arrays.stream(additionalParams.clone())).toArray(String[]::new);
-
-        String requestUri = config.makeRequestUri(requestData);
-        RestTemplate template = restTemplate(new RestTemplateBuilder());
-        return template.getForObject(requestUri, responseType);
-    }
-
+    // Sessions are created independently
     public String createSession(RestTemplate template) throws NoSuchAlgorithmException {
         String timeStamp = config.makeAPITimeStamp();
         String createSessionRequest = config.makeRequestUri(apiUri, "createsessionJson", devID,
@@ -97,5 +75,17 @@ public class Commands {
         }
 
         return createSession(restTemplate(new RestTemplateBuilder()));
+    }
+
+    // Makes any API request, requires POJO
+    public <T> T makeRequestCall(Class<T> responseType, String request, String... additionalParams) throws NoSuchAlgorithmException {
+        String timestamp = config.makeAPITimeStamp();
+        String[] initialData = {apiUri, request + "json", devID, config.makeSignature(request, timestamp, devID, authKey), getSessionID(), timestamp};
+        String[] requestData = Stream.concat(Arrays.stream(initialData), Arrays.stream(additionalParams.clone())).toArray(String[]::new);
+
+        String requestUri = config.makeRequestUri(requestData);
+        RestTemplate template = restTemplate(new RestTemplateBuilder());
+        return template.getForObject(requestUri, responseType);
+
     }
 }
