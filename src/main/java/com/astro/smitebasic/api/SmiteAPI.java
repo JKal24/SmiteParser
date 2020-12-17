@@ -1,7 +1,10 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.db.Queries;
-import com.astro.smitebasic.db.player.PlayerInfo;
+import com.astro.smitebasic.objects.data.PatchData;
+import com.astro.smitebasic.objects.data.ServerData;
+import com.astro.smitebasic.objects.data.UserData;
+import com.astro.smitebasic.objects.player.PlayerInfo;
+import com.astro.smitebasic.smite.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -20,18 +23,7 @@ public class SmiteAPI implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println(getPlayer(mainAccName));
-        System.out.println();
-        System.out.println(getAPIStatus());
-        System.out.println();
-        System.out.println(getSessionStatus());
-        System.out.println();
-        System.out.println(getDataUsed());
-        System.out.println();
-        System.out.println(getServerStatus());
-        System.out.println();
-        System.out.println(getPatchInfo());
-
+        System.out.println(getGods());
     }
 
     public String getAPIStatus() {
@@ -40,11 +32,13 @@ public class SmiteAPI implements CommandLineRunner {
 
     public String getSessionStatus() throws NoSuchAlgorithmException { return commands.makeRequestCall(String.class, "testsession"); }
 
-    public String getDataUsed() throws NoSuchAlgorithmException { return commands.makeRequestCall(String.class, "getdataused"); }
+    public UserData getDataUsed() throws NoSuchAlgorithmException { return commands.makeRequestCall(UserData[].class, "getdataused")[0]; }
 
-    public String getServerStatus() throws NoSuchAlgorithmException { return commands.makeRequestCall(String.class, "gethirezserverstatus"); }
+    public ServerData getServerStatus() throws NoSuchAlgorithmException { return commands.makeRequestCall(ServerData[].class, "gethirezserverstatus")[0]; }
 
-    public String getPatchInfo() throws NoSuchAlgorithmException { return commands.makeRequestCall(String.class, "getpatchinfo"); }
+    public PatchData getPatchInfo() throws NoSuchAlgorithmException { return commands.makeRequestCall(PatchData.class, "getpatchinfo"); }
+
+    public String getGods() throws NoSuchAlgorithmException { return commands.makeRequestCall(String.class, "getgods", Language.ENGLISH.getLanguage()); }
 
     public PlayerInfo getPlayer(String name) throws NoSuchAlgorithmException { return commands.makeRequestCall(PlayerInfo[].class,"getplayer", mainAccName)[0]; }
 

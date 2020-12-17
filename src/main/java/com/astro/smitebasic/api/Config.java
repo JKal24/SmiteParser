@@ -1,31 +1,30 @@
 package com.astro.smitebasic.api;
 
-import org.springframework.stereotype.Component;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
-@Component
 public class Config {
 
-    public String makeAPITimeStamp() {
+    public static String makeAPITimeStamp() {
         return makeTimeStamp("yyyyMMddHHmmss");
     }
 
-    public String makeSignatureTimeStamp() {
+    public static String makeSignatureTimeStamp() {
         return makeTimeStamp("MM/dd/yyyy HH:mm:ss:a");
     }
 
-    public String makeTimeStamp(String format) {
+    public static String makeRecordTimeStamp() { return makeTimeStamp("dd/MM/yy HH:mm:ss:a"); }
+
+    private static String makeTimeStamp(String format) {
         Instant instant = Instant.now();
         DateTimeFormatter formatterUTC = DateTimeFormatter.ofPattern(format).withZone(ZoneId.of("UTC"));
         return formatterUTC.format(instant);
     }
 
-    public String makeSignature(String request, String time, String devID, String authKey) throws NoSuchAlgorithmException {
+    public static String makeSignature(String request, String time, String devID, String authKey) throws NoSuchAlgorithmException {
         String sig = devID + request + authKey + time;
         MessageDigest md = MessageDigest.getInstance("MD5");
         md.update((sig).getBytes());
@@ -39,11 +38,11 @@ public class Config {
         return sb.toString();
     }
 
-    public String makeRequestUri(String... components) {
+    public static String makeRequestUri(String... components) {
         return String.join("/", components);
     }
 
-    public Boolean compareDate(String currentDate, String pastDate) {
+    public static Boolean compareDate(String currentDate, String pastDate) {
         String[] currentDateArr = currentDate.split("/");
         String[] pastDateArr = pastDate.split("/");
 
@@ -55,7 +54,7 @@ public class Config {
         return true;
     }
 
-    public Boolean compareTime(String currentTime, String pastTime) {
+    public static Boolean compareTime(String currentTime, String pastTime) {
         String[] currentTimeArr = sliceTimeArr(currentTime);
         String[] pastTimeArr = sliceTimeArr(pastTime);
 
@@ -93,7 +92,7 @@ public class Config {
         return false;
     }
 
-    public boolean verifySession(String currentDate, String currentTime, String pastDate, String pastTime) {
+    public static boolean verifySession(String currentDate, String currentTime, String pastDate, String pastTime) {
         if (compareDate(currentDate, pastDate)) {
             if (compareTime(currentTime, pastTime)) {
                 return true;
@@ -102,15 +101,15 @@ public class Config {
         return false;
     }
 
-    private String[] sliceTimeArr(String time) {
+    private static String[] sliceTimeArr(String time) {
         return time.replaceAll(" ", ":").split(":");
     }
 
-    private String customAMOrPM(String time) {
+    private static String customAMOrPM(String time) {
         return time.replaceAll(".", "").toUpperCase();
     }
 
-    private Integer customTimeTrim(String timeElement) {
+    private static Integer customTimeTrim(String timeElement) {
         return Integer.parseInt(timeElement.replaceFirst("^0+(?!$)", ""));
     }
 

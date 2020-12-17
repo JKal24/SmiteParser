@@ -1,10 +1,8 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.db.Controller;
-import com.astro.smitebasic.db.Queries;
-import com.astro.smitebasic.db.session.SessionController;
-import com.astro.smitebasic.db.session.SessionInfo;
-import com.astro.smitebasic.smite.Info;
+import com.astro.smitebasic.objects.Queries;
+import com.astro.smitebasic.objects.session.SessionController;
+import com.astro.smitebasic.objects.session.SessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -29,9 +27,6 @@ public class Commands {
     private String authKey;
 
     @Autowired
-    private Config config;
-
-    @Autowired
     private Queries queries;
 
     @Autowired
@@ -46,7 +41,7 @@ public class Commands {
      // Checks to see if access to the API database is valid
     public String ping() {
         try {
-            String pingRequest = config.makeRequestUri(apiUri, "pingJson");
+            String pingRequest = Config.makeRequestUri(apiUri, "pingJson");
             return restTemplate(new RestTemplateBuilder()).getForObject(pingRequest, String.class);
         } catch (Exception exception) {
             LOGGER.info("Could not access API");
@@ -57,9 +52,9 @@ public class Commands {
 
     // Sessions are created independently
     public String createSession(RestTemplate template) throws NoSuchAlgorithmException {
-        String timeStamp = config.makeAPITimeStamp();
-        String createSessionRequest = config.makeRequestUri(apiUri, "createsessionJson", devID,
-                config.makeSignature("createsession", timeStamp, devID, authKey), timeStamp);
+        String timeStamp = Config.makeAPITimeStamp();
+        String createSessionRequest = Config.makeRequestUri(apiUri, "createsessionJson", devID,
+                Config.makeSignature("createsession", timeStamp, devID, authKey), timeStamp);
 
         SessionInfo info = template.getForObject(createSessionRequest, SessionInfo.class);
         sessionController.addConnection(info);
@@ -67,9 +62,9 @@ public class Commands {
     }
 
     public String getSessionID() throws NoSuchAlgorithmException {
-        String[] currentTimeStamp = config.makeSignatureTimeStamp().split(" ");
+        String[] currentTimeStamp = Config.makeSignatureTimeStamp().split(" ");
         for (SessionInfo connection : sessionController.getConnections()) {
-            if (config.verifySession(currentTimeStamp[0], currentTimeStamp[1], connection.getDate(), connection.getTime()))
+            if (Config.verifySession(currentTimeStamp[0], currentTimeStamp[1], connection.getDate(), connection.getTime()))
                 return connection.getSession_id();
             sessionController.deleteConnection(connection);
         }
@@ -79,11 +74,11 @@ public class Commands {
 
     // Makes any API request, requires POJO
     public <T> T makeRequestCall(Class<T> responseType, String request, String... additionalParams) throws NoSuchAlgorithmException {
-        String timestamp = config.makeAPITimeStamp();
-        String[] initialData = {apiUri, request + "json", devID, config.makeSignature(request, timestamp, devID, authKey), getSessionID(), timestamp};
+        String timestamp = Config.makeAPITimeStamp();
+        String[] initialData = {apiUri, request + "json", devID, Config.makeSignature(request, timestamp, devID, authKey), getSessionID(), timestamp};
         String[] requestData = Stream.concat(Arrays.stream(initialData), Arrays.stream(additionalParams.clone())).toArray(String[]::new);
 
-        String requestUri = config.makeRequestUri(requestData);
+        String requestUri = Config.makeRequestUri(requestData);
         RestTemplate template = restTemplate(new RestTemplateBuilder());
         return template.getForObject(requestUri, responseType);
 
