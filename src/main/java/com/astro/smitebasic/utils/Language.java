@@ -1,4 +1,4 @@
-package com.astro.smitebasic.smite;
+package com.astro.smitebasic.utils;
 
 public enum Language {
     ENGLISH("1"),

@@ -13,6 +13,12 @@ public class SessionController {
         repository.save(info);
     }
 
+    public void addConnections(SessionInfo[] sessionInfo) {
+        for (SessionInfo info : sessionInfo) {
+            addConnection(info);
+        }
+    }
+
     public Iterable<SessionInfo> getConnections() {
         return repository.findAll();
     }

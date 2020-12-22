@@ -1,8 +1,8 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.objects.Queries;
 import com.astro.smitebasic.objects.session.SessionController;
 import com.astro.smitebasic.objects.session.SessionInfo;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -16,7 +16,6 @@ import java.util.stream.Stream;
 
 @Component
 public class Commands {
-
     @Value("${smite.api}")
     private String apiUri;
 
@@ -25,9 +24,6 @@ public class Commands {
 
     @Value("${smite.auth-key}")
     private String authKey;
-
-    @Autowired
-    private Queries queries;
 
     @Autowired
     private SessionController sessionController;
@@ -73,14 +69,14 @@ public class Commands {
     }
 
     // Makes any API request, requires POJO
-    public <T> T makeRequestCall(Class<T> responseType, String request, String... additionalParams) throws NoSuchAlgorithmException {
+    public <T> T makeRequestCall(Class<T> responseType, String request, String... additionalParams) throws JsonProcessingException, NoSuchAlgorithmException {
         String timestamp = Config.makeAPITimeStamp();
         String[] initialData = {apiUri, request + "json", devID, Config.makeSignature(request, timestamp, devID, authKey), getSessionID(), timestamp};
         String[] requestData = Stream.concat(Arrays.stream(initialData), Arrays.stream(additionalParams.clone())).toArray(String[]::new);
-
         String requestUri = Config.makeRequestUri(requestData);
-        RestTemplate template = restTemplate(new RestTemplateBuilder());
-        return template.getForObject(requestUri, responseType);
 
+        RestTemplate template = restTemplate(new RestTemplateBuilder());
+        String info = template.getForObject(requestUri, String.class);
+        return Config.parseJSONData(responseType, info);
     }
 }

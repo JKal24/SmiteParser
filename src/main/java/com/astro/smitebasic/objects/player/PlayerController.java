@@ -1,11 +1,10 @@
 package com.astro.smitebasic.objects.player;
 
-import com.astro.smitebasic.objects.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PlayerController implements Controller<PlayerInfo> {
+public class PlayerController {
 
     @Autowired
     private PlayerRepository repository;

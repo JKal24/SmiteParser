@@ -1,5 +1,10 @@
 package com.astro.smitebasic.api;
 
+import com.astro.smitebasic.objects.characters.skins.SkinsInfo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
@@ -99,6 +104,13 @@ public class Config {
             }
         }
         return false;
+    }
+
+    // Will parse JSON data, regardless of whether it is a JSON array or object
+    public static <T> T parseJSONData(Class<T> responseType, String data) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,true);
+        return mapper.readValue(data, responseType);
     }
 
     private static String[] sliceTimeArr(String time) {
