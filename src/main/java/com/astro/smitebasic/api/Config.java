@@ -1,9 +1,9 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.objects.characters.skins.SkinsInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,21 +13,16 @@ import java.time.format.DateTimeFormatter;
 
 public class Config {
 
-    public static String makeAPITimeStamp() {
-        return makeTimeStamp("yyyyMMddHHmmss");
-    }
+    @Value("${smite.api}")
+    private String apiUri;
 
-    public static String makeSignatureTimeStamp() {
-        return makeTimeStamp("MM/dd/yyyy HH:mm:ss:a");
-    }
+    @Value("${smite.dev-id}")
+    private String devID;
 
-    public static String makeRecordTimeStamp() { return makeTimeStamp("dd/MM/yy HH:mm:ss:a"); }
+    @Value("${smite.auth-key}")
+    private String authKey;
 
-    private static String makeTimeStamp(String format) {
-        Instant instant = Instant.now();
-        DateTimeFormatter formatterUTC = DateTimeFormatter.ofPattern(format).withZone(ZoneId.of("UTC"));
-        return formatterUTC.format(instant);
-    }
+    // API Signature with valid devID and authentication key
 
     public static String makeSignature(String request, String time, String devID, String authKey) throws NoSuchAlgorithmException {
         String sig = devID + request + authKey + time;
@@ -45,6 +40,33 @@ public class Config {
 
     public static String makeRequestUri(String... components) {
         return String.join("/", components);
+    }
+
+    public static boolean verifySession(String currentDate, String currentTime, String pastDate, String pastTime) {
+        if (compareDate(currentDate, pastDate)) {
+            if (compareTime(currentTime, pastTime)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Custom timestamps used for API requests
+
+    public static String makeAPITimeStamp() {
+        return makeTimeStamp("yyyyMMddHHmmss");
+    }
+
+    public static String makeSignatureTimeStamp() {
+        return makeTimeStamp("MM/dd/yyyy HH:mm:ss:a");
+    }
+
+    public static String makeRecordTimeStamp() { return makeTimeStamp("dd/MM/yy HH:mm:ss:a"); }
+
+    private static String makeTimeStamp(String format) {
+        Instant instant = Instant.now();
+        DateTimeFormatter formatterUTC = DateTimeFormatter.ofPattern(format).withZone(ZoneId.of("UTC"));
+        return formatterUTC.format(instant);
     }
 
     public static Boolean compareDate(String currentDate, String pastDate) {
@@ -97,22 +119,6 @@ public class Config {
         return false;
     }
 
-    public static boolean verifySession(String currentDate, String currentTime, String pastDate, String pastTime) {
-        if (compareDate(currentDate, pastDate)) {
-            if (compareTime(currentTime, pastTime)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Will parse JSON data, regardless of whether it is a JSON array or object
-    public static <T> T parseJSONData(Class<T> responseType, String data) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,true);
-        return mapper.readValue(data, responseType);
-    }
-
     private static String[] sliceTimeArr(String time) {
         return time.replaceAll(" ", ":").split(":");
     }
@@ -123,6 +129,13 @@ public class Config {
 
     private static Integer customTimeTrim(String timeElement) {
         return Integer.parseInt(timeElement.replaceFirst("^0+(?!$)", ""));
+    }
+
+    // Will parse JSON data, regardless of whether it is a JSON array or object
+    public static <T> T parseJSONData(Class<T> responseType, String data) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,true);
+        return mapper.readValue(data, responseType);
     }
 
 }

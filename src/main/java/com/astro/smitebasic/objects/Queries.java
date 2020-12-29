@@ -1,27 +1,37 @@
 package com.astro.smitebasic.objects;
 
-import com.astro.smitebasic.objects.characters.skins.SkinsController;
-import com.astro.smitebasic.objects.data.DataController;
-import com.astro.smitebasic.objects.player.PlayerController;
-import com.astro.smitebasic.objects.player.friends.FriendsController;
-import com.astro.smitebasic.objects.session.SessionController;
+import com.astro.smitebasic.objects.characters.skins.SkinsService;
+import com.astro.smitebasic.objects.gamedata.patch.PatchService;
+import com.astro.smitebasic.objects.gamedata.server.ServerService;
+import com.astro.smitebasic.objects.gamedata.user.UserService;
+import com.astro.smitebasic.objects.player.PlayerService;
+import com.astro.smitebasic.objects.player.friends.FriendsService;
+import com.astro.smitebasic.objects.session.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Queries {
 
     @Autowired
-    public SkinsController skinsController;
+    public SkinsService skinsService;
 
     @Autowired
-    public DataController dataController;
+    public PatchService patchService;
 
     @Autowired
-    public FriendsController friendsController;
+    public ServerService serverService;
 
     @Autowired
-    public PlayerController playerController;
+    public UserService userService;
 
     @Autowired
-    public SessionController sessionController;
+    public FriendsService friendsService;
+
+    @Autowired
+    public PlayerService playerService;
+
+    @Autowired
+    public SessionService sessionService;
 
 }

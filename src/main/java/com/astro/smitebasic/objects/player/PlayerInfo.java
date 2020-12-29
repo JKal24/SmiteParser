@@ -75,27 +75,27 @@ public class PlayerInfo {
 
     @JsonProperty("RankedConquest")
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private ConquestData RankedConquest;
+    private ConquestInfo RankedConquest;
 
     @JsonProperty("RankedConquestController")
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private ConquestControllerData RankedConquestController;
+    private ConquestControllerInfo RankedConquestController;
 
     @JsonProperty("RankedDuel")
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private DuelData RankedDuel;
+    private DuelInfo RankedDuel;
 
     @JsonProperty("RankedDuelController")
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private DuelControllerData RankedDuelController;
+    private DuelControllerInfo RankedDuelController;
 
     @JsonProperty("RankedJoust")
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private JoustData RankedJoust;
+    private JoustInfo RankedJoust;
 
     @JsonProperty("RankedJoustController")
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private JoustControllerData RankedJoustController;
+    private JoustControllerInfo RankedJoustController;
 
     @JsonProperty("Region")
     private String Region;
@@ -139,8 +139,8 @@ public class PlayerInfo {
                       String leaves, String level, String losses, String masteryLevel, String mergedPlayers, String minutesPlayed,
                       String name, String personal_Status_Message, String platform, String rank_Stat_Conquest,
                       String rank_Stat_Conquest_Controller, String rank_Stat_Duel, String rank_Stat_duel_Controller, String rank_Stat_Joust,
-                      String rank_Stat_Joust_Controller, ConquestData rankedConquest, ConquestControllerData rankedConquestController,
-                      DuelData rankedDuel, DuelControllerData rankedDuelController, JoustData rankedJoust, JoustControllerData rankedJoustController,
+                      String rank_Stat_Joust_Controller, ConquestInfo rankedConquest, ConquestControllerInfo rankedConquestController,
+                      DuelInfo rankedDuel, DuelControllerInfo rankedDuelController, JoustInfo rankedJoust, JoustControllerInfo rankedJoustController,
                       String region, String teamId, String team_Name, String tier_Conquest, String tier_Duel, String tier_Joust,
                       String total_Achievements, String total_Worshippers, String wins, String hz_gamer_tag, String hz_player_name, String ret_msg) {
         this.id = id;
@@ -343,51 +343,51 @@ public class PlayerInfo {
         Rank_Stat_Joust_Controller = rank_Stat_Joust_Controller;
     }
 
-    public ConquestData getRankedConquest() {
+    public ConquestInfo getRankedConquest() {
         return RankedConquest;
     }
 
-    public void setRankedConquest(ConquestData rankedConquest) {
+    public void setRankedConquest(ConquestInfo rankedConquest) {
         RankedConquest = rankedConquest;
     }
 
-    public ConquestControllerData getRankedConquestController() {
+    public ConquestControllerInfo getRankedConquestController() {
         return RankedConquestController;
     }
 
-    public void setRankedConquestController(ConquestControllerData rankedConquestController) {
+    public void setRankedConquestController(ConquestControllerInfo rankedConquestController) {
         RankedConquestController = rankedConquestController;
     }
 
-    public DuelData getRankedDuel() {
+    public DuelInfo getRankedDuel() {
         return RankedDuel;
     }
 
-    public void setRankedDuel(DuelData rankedDuel) {
+    public void setRankedDuel(DuelInfo rankedDuel) {
         RankedDuel = rankedDuel;
     }
 
-    public DuelControllerData getRankedDuelController() {
+    public DuelControllerInfo getRankedDuelController() {
         return RankedDuelController;
     }
 
-    public void setRankedDuelController(DuelControllerData rankedDuelController) {
+    public void setRankedDuelController(DuelControllerInfo rankedDuelController) {
         RankedDuelController = rankedDuelController;
     }
 
-    public JoustData getRankedJoust() {
+    public JoustInfo getRankedJoust() {
         return RankedJoust;
     }
 
-    public void setRankedJoust(JoustData rankedJoust) {
+    public void setRankedJoust(JoustInfo rankedJoust) {
         RankedJoust = rankedJoust;
     }
 
-    public JoustControllerData getRankedJoustController() {
+    public JoustControllerInfo getRankedJoustController() {
         return RankedJoustController;
     }
 
-    public void setRankedJoustController(JoustControllerData rankedJoustController) {
+    public void setRankedJoustController(JoustControllerInfo rankedJoustController) {
         RankedJoustController = rankedJoustController;
     }
 

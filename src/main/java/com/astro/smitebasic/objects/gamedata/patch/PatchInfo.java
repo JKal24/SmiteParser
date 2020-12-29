@@ -1,4 +1,4 @@
-package com.astro.smitebasic.objects.data;
+package com.astro.smitebasic.objects.gamedata.patch;
 
 import com.astro.smitebasic.api.Config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "patch_data")
-public class PatchData {
+public class PatchInfo {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -23,9 +23,9 @@ public class PatchData {
 
     private String date = Config.makeRecordTimeStamp();
 
-    public PatchData() { }
+    public PatchInfo() { }
 
-    public PatchData(String ret_msg, String version_string) {
+    public PatchInfo(String ret_msg, String version_string) {
         this.ret_msg = ret_msg;
         this.version_string = version_string;
     }
@@ -48,7 +48,7 @@ public class PatchData {
 
     @Override
     public String toString() {
-        return "PatchData{" +
+        return "PatchInfo{" +
                 "ret_msg='" + ret_msg + '\'' +
                 ", version_string='" + version_string + '\'' +
                 ", date='" + date + '\'' +

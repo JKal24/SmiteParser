@@ -1,4 +1,4 @@
-package com.astro.smitebasic.objects.data;
+package com.astro.smitebasic.objects.gamedata.server;
 
 import com.astro.smitebasic.api.Config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "server_data")
-public class ServerData {
+public class ServerInfo {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -38,9 +38,9 @@ public class ServerData {
 
     private String date = Config.makeRecordTimeStamp();
 
-    public ServerData() { }
+    public ServerInfo() { }
 
-    public ServerData(String entry_datetime, String environment, String limited_access, String platform, String ret_msg, String status, String version) {
+    public ServerInfo(String entry_datetime, String environment, String limited_access, String platform, String ret_msg, String status, String version) {
         this.entry_datetime = entry_datetime;
         this.environment = environment;
         this.limited_access = limited_access;
@@ -108,7 +108,7 @@ public class ServerData {
 
     @Override
     public String toString() {
-        return "ServerData{" +
+        return "ServerInfo{" +
                 "entry_datetime='" + entry_datetime + '\'' +
                 ", environment='" + environment + '\'' +
                 ", limited_access='" + limited_access + '\'' +

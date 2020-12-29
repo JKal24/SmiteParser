@@ -1,6 +1,6 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.objects.session.SessionController;
+import com.astro.smitebasic.objects.session.SessionService;
 import com.astro.smitebasic.objects.session.SessionInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class Commands {
     private String authKey;
 
     @Autowired
-    private SessionController sessionController;
+    private SessionService sessionController;
 
     private final Logger LOGGER = Logger.getLogger(Commands.class.getName());
 
@@ -41,9 +41,8 @@ public class Commands {
             return restTemplate(new RestTemplateBuilder()).getForObject(pingRequest, String.class);
         } catch (Exception exception) {
             LOGGER.info("Could not access API");
-        } finally {
-            return "No information";
         }
+        return "No information";
     }
 
     // Sessions are created independently
@@ -72,11 +71,23 @@ public class Commands {
     public <T> T makeRequestCall(Class<T> responseType, String request, String... additionalParams) throws JsonProcessingException, NoSuchAlgorithmException {
         String timestamp = Config.makeAPITimeStamp();
         String[] initialData = {apiUri, request + "json", devID, Config.makeSignature(request, timestamp, devID, authKey), getSessionID(), timestamp};
-        String[] requestData = Stream.concat(Arrays.stream(initialData), Arrays.stream(additionalParams.clone())).toArray(String[]::new);
-        String requestUri = Config.makeRequestUri(requestData);
+        String requestUri = Config.makeRequestUri(
+                Stream.concat(Arrays.stream(initialData),
+                        Arrays.stream(additionalParams.clone())).toArray(String[]::new)
+        );
 
-        RestTemplate template = restTemplate(new RestTemplateBuilder());
-        String info = template.getForObject(requestUri, String.class);
+        String info = restTemplate(new RestTemplateBuilder()).getForObject(requestUri, String.class);
         return Config.parseJSONData(responseType, info);
+    }
+
+    public String makeRequestCall(String request, String... additionalParams) throws NoSuchAlgorithmException {
+        String timestamp = Config.makeAPITimeStamp();
+        String[] initialData = {apiUri, request + "json", devID, Config.makeSignature(request, timestamp, devID, authKey), getSessionID(), timestamp};
+        String requestUri = Config.makeRequestUri(
+                Stream.concat(Arrays.stream(initialData),
+                        Arrays.stream(additionalParams.clone())).toArray(String[]::new)
+        );
+
+        return restTemplate(new RestTemplateBuilder()).getForObject(requestUri, String.class);
     }
 }

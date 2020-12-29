@@ -6,78 +6,78 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "player_info_joust_data")
-public class JoustData implements GameModeData {
+@Table(name = "player_info_duel_controller_data")
+public class DuelControllerInfo implements GameModeData {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "joust_id")
+    @Column(name = "duel_controller_id")
     private Integer id;
 
     @JsonProperty("Leaves")
-    @Column(name = "joust_leaves")
+    @Column(name = "duel_controller_leaves")
     private String Leaves;
 
     @JsonProperty("Losses")
-    @Column(name = "joust_losses")
+    @Column(name = "duel_controller_losses")
     private String Losses;
 
     @JsonProperty("Name")
-    @Column(name = "joust_name")
+    @Column(name = "duel_controller_name")
     private String Name;
 
     @JsonProperty("Points")
-    @Column(name = "joust_points")
+    @Column(name = "duel_controller_points")
     private String Points;
 
     @JsonProperty("PrevRank")
-    @Column(name = "joust_prev_rank")
+    @Column(name = "duel_controller_prev_rank")
     private String PrevRank;
 
     @JsonProperty("Rank")
-    @Column(name = "joust_rank")
+    @Column(name = "duel_controller_rank")
     private String Rank;
 
     @JsonProperty("Rank_Stat")
-    @Column(name = "joust_rank_stat")
+    @Column(name = "duel_controller_rank_stat")
     private String Rank_Stat;
 
     @JsonProperty("Rank_Variance")
-    @Column(name = "joust_rank_variance")
+    @Column(name = "duel_controller_rank_variance")
     private String Rank_Variance;
 
     @JsonProperty("Season")
-    @Column(name = "joust_season")
+    @Column(name = "duel_controller_season")
     private String Season;
 
     @JsonProperty("Tier")
-    @Column(name = "joust_tier")
+    @Column(name = "duel_controller_tier")
     private String Tier;
 
     @JsonProperty("Trend")
-    @Column(name = "joust_trend")
+    @Column(name = "duel_controller_trend")
     private String Trend;
 
     @JsonProperty("Wins")
-    @Column(name = "joust_wins")
+    @Column(name = "duel_controller_wins")
     private String Wins;
 
     @JsonProperty("player_id")
-    @Column(name = "joust_player_id")
+    @Column(name = "duel_controller_player_id")
     private String player_id;
 
     @JsonProperty("ret_msg")
-    @Column(name = "joust_ret_msg")
+    @Column(name = "duel_controller_ret_msg")
     private String ret_msg;
 
     @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinColumn(name = "joust_id")
+    @JoinColumn(name = "duel_controller_id")
     private PlayerInfo info;
 
-    public JoustData() { }
+    public DuelControllerInfo() { }
 
-    public JoustData(Integer id, String leaves, String losses, String name, String points, String prevRank,
-                    String rank, String rank_Stat, String rank_Variance, String season, String tier,
-                    String trend, String wins, String player_id, String ret_msg, PlayerInfo info) {
+    public DuelControllerInfo(Integer id, String leaves, String losses, String name, String points, String prevRank,
+                              String rank, String rank_Stat, String rank_Variance, String season, String tier,
+                              String trend, String wins, String player_id, String ret_msg, PlayerInfo info) {
         this.id = id;
         Leaves = leaves;
         Losses = losses;
@@ -222,7 +222,7 @@ public class JoustData implements GameModeData {
 
     @Override
     public String toString() {
-        return "JoustData{" +
+        return "DuelControllerInfo{" +
                 " Leaves=" + Leaves +
                 ", Losses=" + Losses +
                 ", Name='" + Name + '\'' +

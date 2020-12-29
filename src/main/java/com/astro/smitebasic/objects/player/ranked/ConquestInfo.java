@@ -6,78 +6,78 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "player_info_conquest_controller_data")
-public class ConquestControllerData implements GameModeData {
+@Table(name = "player_info_conquest_data")
+public class ConquestInfo implements GameModeData {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    @Column(name = "conquest_controller_id")
+    @Column(name = "conquest_id")
     private Integer id;
 
     @JsonProperty("Leaves")
-    @Column(name = "conquest_controller_leaves")
+    @Column(name = "conquest_leaves")
     private String Leaves;
 
     @JsonProperty("Losses")
-    @Column(name = "conquest_controller_losses")
+    @Column(name = "conquest_losses")
     private String Losses;
 
     @JsonProperty("Name")
-    @Column(name = "conquest_controller_name")
+    @Column(name = "conquest_name")
     private String Name;
 
     @JsonProperty("Points")
-    @Column(name = "conquest_controller_points")
+    @Column(name = "conquest_points")
     private String Points;
 
     @JsonProperty("PrevRank")
-    @Column(name = "conquest_controller_prev_rank")
+    @Column(name = "conquest_prev_rank")
     private String PrevRank;
 
     @JsonProperty("Rank")
-    @Column(name = "conquest_controller_rank")
+    @Column(name = "conquest_rank")
     private String Rank;
 
     @JsonProperty("Rank_Stat")
-    @Column(name = "conquest_controller_rank_stat")
+    @Column(name = "conquest_rank_stat")
     private String Rank_Stat;
 
     @JsonProperty("Rank_Variance")
-    @Column(name = "conquest_controller_rank_variance")
+    @Column(name = "conquest_rank_variance")
     private String Rank_Variance;
 
     @JsonProperty("Season")
-    @Column(name = "conquest_controller_season")
+    @Column(name = "conquest_season")
     private String Season;
 
     @JsonProperty("Tier")
-    @Column(name = "conquest_controller_tier")
+    @Column(name = "conquest_tier")
     private String Tier;
 
     @JsonProperty("Trend")
-    @Column(name = "conquest_controller_trend")
+    @Column(name = "conquest_trend")
     private String Trend;
 
     @JsonProperty("Wins")
-    @Column(name = "conquest_controller_wins")
+    @Column(name = "conquest_wins")
     private String Wins;
 
     @JsonProperty("player_id")
-    @Column(name = "conquest_controller_player_id")
+    @Column(name = "conquest_player_id")
     private String player_id;
 
     @JsonProperty("ret_msg")
-    @Column(name = "conquest_controller_ret_msg")
+    @Column(name = "conquest_ret_msg")
     private String ret_msg;
 
     @OneToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinColumn(name = "conquest_controller_id")
+    @JoinColumn(name = "conquest_id")
     private PlayerInfo info;
 
-    public ConquestControllerData() { }
+    public ConquestInfo() { }
 
-    public ConquestControllerData(Integer id, String leaves, String losses, String name, String points, String prevRank,
-                                  String rank, String rank_Stat, String rank_Variance, String season, String tier,
-                                  String trend, String wins, String player_id, String ret_msg, PlayerInfo info) {
+    public ConquestInfo(Integer id, String leaves, String losses, String name, String points, String prevRank,
+                        String rank, String rank_Stat, String rank_Variance, String season, String tier,
+                        String trend, String wins, String player_id, String ret_msg, PlayerInfo info) {
         this.id = id;
         Leaves = leaves;
         Losses = losses;
@@ -251,7 +251,7 @@ public class ConquestControllerData implements GameModeData {
 
     @Override
     public String toString() {
-        return "ConquestControllerData{" +
+        return "ConquestInfo{" +
                 " Leaves=" + Leaves +
                 ", Losses=" + Losses +
                 ", Name='" + Name + '\'' +

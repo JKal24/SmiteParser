@@ -1,4 +1,4 @@
-package com.astro.smitebasic.objects.data;
+package com.astro.smitebasic.objects.gamedata.user;
 
 import com.astro.smitebasic.api.Config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "user_data")
-public class UserData {
+public class UserInfo {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -41,9 +41,9 @@ public class UserData {
 
     private String date = Config.makeRecordTimeStamp();
 
-    public UserData() { }
+    public UserInfo() { }
 
-    public UserData(Integer active_Sessions, Integer concurrent_Sessions, String request_Limit_Daily, String session_Cap,
+    public UserInfo(Integer active_Sessions, Integer concurrent_Sessions, String request_Limit_Daily, String session_Cap,
                     String session_Time_Limit, String total_Requests_Today, String total_Sessions_Today, String ret_msg) {
         Active_Sessions = active_Sessions;
         Concurrent_Sessions = concurrent_Sessions;
@@ -121,7 +121,7 @@ public class UserData {
 
     @Override
     public String toString() {
-        return "UserData{" +
+        return "UserInfo{" +
                 "Active_Sessions=" + Active_Sessions +
                 ", Concurrent_Sessions=" + Concurrent_Sessions +
                 ", Request_Limit_Daily='" + Request_Limit_Daily + '\'' +

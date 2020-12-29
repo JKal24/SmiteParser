@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "player_info_joust_controller_data")
-public class JoustControllerData implements GameModeData {
+public class JoustControllerInfo implements GameModeData {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     @Column(name = "joust_controller_id")
@@ -73,11 +73,11 @@ public class JoustControllerData implements GameModeData {
     @JoinColumn(name = "joust_controller_id")
     private PlayerInfo info;
 
-    public JoustControllerData() { }
+    public JoustControllerInfo() { }
 
-    public JoustControllerData(Integer id, String leaves, String losses, String name, String points, String prevRank,
-                     String rank, String rank_Stat, String rank_Variance, String season, String tier,
-                     String trend, String wins, String player_id, String ret_msg, PlayerInfo info) {
+    public JoustControllerInfo(Integer id, String leaves, String losses, String name, String points, String prevRank,
+                               String rank, String rank_Stat, String rank_Variance, String season, String tier,
+                               String trend, String wins, String player_id, String ret_msg, PlayerInfo info) {
         this.id = id;
         Leaves = leaves;
         Losses = losses;
@@ -222,7 +222,7 @@ public class JoustControllerData implements GameModeData {
 
     @Override
     public String toString() {
-        return "JoustControllerData{" +
+        return "JoustControllerInfo{" +
                 " Leaves=" + Leaves +
                 ", Losses=" + Losses +
                 ", Name='" + Name + '\'' +

@@ -1,10 +1,10 @@
 package com.astro.smitebasic.api;
 
 import com.astro.smitebasic.objects.Queries;
-import com.astro.smitebasic.objects.characters.skins.SkinsInfo;
-import com.astro.smitebasic.objects.data.PatchData;
-import com.astro.smitebasic.objects.data.ServerData;
-import com.astro.smitebasic.objects.data.UserData;
+import com.astro.smitebasic.objects.characters.CharacterInfo;
+import com.astro.smitebasic.objects.gamedata.patch.PatchInfo;
+import com.astro.smitebasic.objects.gamedata.server.ServerInfo;
+import com.astro.smitebasic.objects.gamedata.user.UserInfo;
 import com.astro.smitebasic.objects.player.PlayerInfo;
 import com.astro.smitebasic.utils.Language;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,7 +32,9 @@ public class SmiteAPI implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        System.out.println(getSessionStatus());
+        for (CharacterInfo info : getGods()) {
+            System.out.println(info);
+        }
     }
 
     public String getAPIStatus() {
@@ -43,22 +45,24 @@ public class SmiteAPI implements CommandLineRunner {
         return commands.makeRequestCall(String.class, "testsession");
     }
 
-    public UserData[] getDataUsed() throws NoSuchAlgorithmException, JsonProcessingException {
-        return commands.makeRequestCall(UserData[].class, "getdataused");
+    public UserInfo[] getDataUsed() throws NoSuchAlgorithmException, JsonProcessingException {
+        return commands.makeRequestCall(UserInfo[].class, "getdataused");
     }
 
-    public ServerData[] getServerStatus() throws NoSuchAlgorithmException, JsonProcessingException {
-        ServerData[] data = commands.makeRequestCall(ServerData[].class, "gethirezserverstatus");
-        queries.dataController.addConnections(data);
-        return data;
+    public ServerInfo[] getServerStatus() throws NoSuchAlgorithmException, JsonProcessingException {
+        ServerInfo[] info = commands.makeRequestCall(ServerInfo[].class, "gethirezserverstatus");
+        queries.serverService.addConnections(info);
+        return info;
     }
 
-    public PatchData[] getPatchInfo() throws NoSuchAlgorithmException, JsonProcessingException {
-        return commands.makeRequestCall(PatchData[].class, "getpatchinfo");
+    public PatchInfo[] getPatchInfo() throws NoSuchAlgorithmException, JsonProcessingException {
+        PatchInfo[] info = commands.makeRequestCall(PatchInfo[].class, "getpatchinfo");
+        queries.patchService.addConnections(info);
+        return info;
     }
 
-    public String[] getGods() throws NoSuchAlgorithmException, JsonProcessingException {
-        return commands.makeRequestCall(String[].class, "getgods", Language.ENGLISH.getLanguage());
+    public CharacterInfo[] getGods() throws NoSuchAlgorithmException, JsonProcessingException {
+        return commands.makeRequestCall(CharacterInfo[].class, "getgods", Language.ENGLISH.getLanguage());
     }
 
     public PlayerInfo[] getPlayer(String name) throws NoSuchAlgorithmException, JsonProcessingException {
