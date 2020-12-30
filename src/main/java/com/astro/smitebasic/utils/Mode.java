@@ -44,6 +44,9 @@ public enum Mode {
     CLASH_TUTORIAL(471),
     BASIC_TUTORIAL(436);
 
-    Mode(int identifier) {
-    }
+    private Integer mode;
+
+    Mode(Integer identifier) { this.mode = identifier; }
+
+    public String getModeID() { return mode.toString(); }
 }

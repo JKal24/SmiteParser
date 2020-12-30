@@ -18,5 +18,5 @@ public enum Language {
         this.language = identifier;
     }
 
-    public String getLanguage() { return language; }
+    public String getLanguageID() { return language; }
 }

@@ -1,19 +1,11 @@
-package com.astro.smitebasic.objects.gamedata.user;
+package com.astro.smitebasic.objects.gamedata;
 
 import com.astro.smitebasic.api.Config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-@Table(name = "user_data")
 public class UserInfo {
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
 
     @JsonProperty("Active_Sessions")
     private Integer Active_Sessions;

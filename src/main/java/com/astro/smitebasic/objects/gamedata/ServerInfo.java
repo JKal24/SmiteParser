@@ -1,19 +1,11 @@
-package com.astro.smitebasic.objects.gamedata.server;
+package com.astro.smitebasic.objects.gamedata;
 
 import com.astro.smitebasic.api.Config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-@Table(name = "server_data")
 public class ServerInfo {
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
 
     @JsonProperty("entry_datetime")
     private String entry_datetime;

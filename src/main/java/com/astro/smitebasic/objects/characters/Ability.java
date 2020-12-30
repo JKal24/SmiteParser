@@ -10,8 +10,8 @@ public class Ability {
     private String cooldown;
     private String cost;
     private String description;
-    private List<AbilityDescription> abilityType;
-    private List<AbilityDescription> abilityDamage;
+    private List<Description> abilityType;
+    private List<Description> abilityDamage;
 
     @SuppressWarnings("unchecked")
     @JsonProperty("itemDescription")
@@ -19,8 +19,8 @@ public class Ability {
         this.cooldown = (String) description.get("cooldown");
         this.cost = (String) description.get("cost");
         this.description = (String) description.get("description");
-        this.abilityType = (List<AbilityDescription>) description.get("menuitems");
-        this.abilityDamage = (List<AbilityDescription>) description.get("rankitems");
+        this.abilityType = (List<Description>) description.get("menuitems");
+        this.abilityDamage = (List<Description>) description.get("rankitems");
     }
 
     public String getCooldown() {
@@ -47,19 +47,19 @@ public class Ability {
         this.description = description;
     }
 
-    public List<AbilityDescription> getAbilityType() {
+    public List<Description> getAbilityType() {
         return abilityType;
     }
 
-    public void setAbilityType(List<AbilityDescription> abilityType) {
+    public void setAbilityType(List<Description> abilityType) {
         this.abilityType = abilityType;
     }
 
-    public List<AbilityDescription> getAbilityDamage() {
+    public List<Description> getAbilityDamage() {
         return abilityDamage;
     }
 
-    public void setAbilityDamage(List<AbilityDescription> abilityDamage) {
+    public void setAbilityDamage(List<Description> abilityDamage) {
         this.abilityDamage = abilityDamage;
     }
 

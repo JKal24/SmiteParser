@@ -37,19 +37,19 @@ public class CharacterInfo {
     private Integer abilityId5;
 
     @JsonProperty("Ability_1")
-    private Description ability1;
+    private AbilityDescription ability1;
 
     @JsonProperty("Ability_2")
-    private Description ability2;
+    private AbilityDescription ability2;
 
     @JsonProperty("Ability_3")
-    private Description ability3;
+    private AbilityDescription ability3;
 
     @JsonProperty("Ability_4")
-    private Description ability4;
+    private AbilityDescription ability4;
 
     @JsonProperty("Ability_5")
-    private Description ability5;
+    private AbilityDescription ability5;
 
     @JsonProperty("AttackSpeed")
     private Float attackSpeed;
@@ -251,43 +251,43 @@ public class CharacterInfo {
         this.abilityId5 = abilityId5;
     }
 
-    public Description getAbility1() {
+    public AbilityDescription getAbility1() {
         return ability1;
     }
 
-    public void setAbility1(Description ability1) {
+    public void setAbility1(AbilityDescription ability1) {
         this.ability1 = ability1;
     }
 
-    public Description getAbility2() {
+    public AbilityDescription getAbility2() {
         return ability2;
     }
 
-    public void setAbility2(Description ability2) {
+    public void setAbility2(AbilityDescription ability2) {
         this.ability2 = ability2;
     }
 
-    public Description getAbility3() {
+    public AbilityDescription getAbility3() {
         return ability3;
     }
 
-    public void setAbility3(Description ability3) {
+    public void setAbility3(AbilityDescription ability3) {
         this.ability3 = ability3;
     }
 
-    public Description getAbility4() {
+    public AbilityDescription getAbility4() {
         return ability4;
     }
 
-    public void setAbility4(Description ability4) {
+    public void setAbility4(AbilityDescription ability4) {
         this.ability4 = ability4;
     }
 
-    public Description getAbility5() {
+    public AbilityDescription getAbility5() {
         return ability5;
     }
 
-    public void setAbility5(Description ability5) {
+    public void setAbility5(AbilityDescription ability5) {
         this.ability5 = ability5;
     }
 

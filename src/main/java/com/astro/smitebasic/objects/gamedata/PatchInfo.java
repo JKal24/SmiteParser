@@ -1,19 +1,11 @@
-package com.astro.smitebasic.objects.gamedata.patch;
+package com.astro.smitebasic.objects.gamedata;
 
 import com.astro.smitebasic.api.Config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.*;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-@Table(name = "patch_data")
 public class PatchInfo {
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
 
     @JsonProperty("ret_msg")
     private String ret_msg;
