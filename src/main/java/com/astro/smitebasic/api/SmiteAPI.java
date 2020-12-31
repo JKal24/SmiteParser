@@ -1,14 +1,17 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.objects.Queries;
 import com.astro.smitebasic.objects.characters.CharacterInfo;
 import com.astro.smitebasic.objects.characters.CharacterNotFoundException;
 import com.astro.smitebasic.objects.characters.leaderboard.LeaderboardInfo;
 import com.astro.smitebasic.objects.gamedata.PatchInfo;
 import com.astro.smitebasic.objects.gamedata.ServerInfo;
 import com.astro.smitebasic.objects.gamedata.UserInfo;
+import com.astro.smitebasic.objects.items.BaseItemInfo;
 import com.astro.smitebasic.objects.items.RecommendedItemInfo;
+import com.astro.smitebasic.objects.player.FriendsInfo;
+import com.astro.smitebasic.objects.player.PlayerDescription;
 import com.astro.smitebasic.objects.player.PlayerInfo;
+import com.astro.smitebasic.objects.player.PlayerStatistics;
 import com.astro.smitebasic.utils.Language;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +37,14 @@ public class SmiteAPI implements CommandLineRunner {
     @Autowired
     private Commands commands;
 
-    @Autowired
-    private Queries queries;
-
     @Override
     public void run(String... args) throws Exception {
         Integer zkID = 1926;
-        System.out.println(commands.makeRequestCall("getitems", Language.ENGLISH.getLanguageID()));
-        System.out.println(getGod("Yemoja"));
-
-//        for (RecommendedItemInfo item : this.getGodRecommendedItems(zkID, Language.ENGLISH.getLanguageID())) {
-//            System.out.println(item);
+//        for (FriendsInfo value : getFriends(mainAccName)) {
+//            System.out.println(value);
 //        }
+
+        System.out.println(commands.makeRequestCall("getgodranks", mainAccName));
     }
 
     public String getAPIStatus() {
@@ -87,7 +86,7 @@ public class SmiteAPI implements CommandLineRunner {
         try {
             CharacterInfo[] characters = this.getGods();
             for (CharacterInfo character : characters) {
-                if (ID == character.getId()) {
+                if (ID.equals(character.getId())) {
                     return character;
                 }
             }
@@ -124,8 +123,28 @@ public class SmiteAPI implements CommandLineRunner {
         return commands.makeRequestCall(LeaderboardInfo[].class, "getgodleaderboard", godID.toString(), mode);
     }
 
-    public RecommendedItemInfo[] getGodRecommendedItems(Integer godID, String language) throws JsonProcessingException, NoSuchAlgorithmException {
-        return commands.makeRequestCall(RecommendedItemInfo[].class, "getgodrecommendeditems", godID.toString(), language);
+    public RecommendedItemInfo[] getGodRecommendedItems(Integer godID, String languageID) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(RecommendedItemInfo[].class, "getgodrecommendeditems", godID.toString(), languageID);
+    }
+
+    public BaseItemInfo getItem(String itemName) throws JsonProcessingException, NoSuchAlgorithmException {
+        try {
+            BaseItemInfo[] items = this.getItems(Language.ENGLISH.getLanguageID());
+            for (BaseItemInfo item : items) {
+                if (itemName.equals(item.getItemName())) {
+                    return item;
+                }
+            }
+            throw new CharacterNotFoundException();
+        } catch(Exception e) {
+            // Implement item exception...
+            LOGGER.log(Level.INFO, String.format("Could not find item: %s", itemName));
+        }
+        return null;
+    }
+
+    public BaseItemInfo[] getItems(String languageID) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(BaseItemInfo[].class, "getitems", languageID);
     }
 
     // God ID is gathered through accessing god information
@@ -138,4 +157,25 @@ public class SmiteAPI implements CommandLineRunner {
         return commands.makeRequestCall(PlayerInfo[].class,"getplayer", mainAccName);
     }
 
+    // Uses 3rd party ID (PS4, XBox, Switch, etc.)
+    public PlayerInfo[] getPlayer(String name, String portalID) throws NoSuchAlgorithmException, JsonProcessingException {
+        return commands.makeRequestCall(PlayerInfo[].class,"getplayer", mainAccName, portalID);
+    }
+
+    public PlayerDescription[] getPlayerDescription(String name) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(PlayerDescription[].class, "getplayeridbyname", name);
+    }
+
+    public PlayerDescription[] getPlayerDescription(String portalID, String tag, Boolean gamerTag) throws JsonProcessingException, NoSuchAlgorithmException {
+        return gamerTag ? commands.makeRequestCall(PlayerDescription[].class, "getplayeridsbygamertag", portalID, tag) :
+                commands.makeRequestCall(PlayerDescription[].class, "getplayeridbyportaluserid", portalID, tag);
+    }
+
+    public FriendsInfo[] getFriends(String name) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(FriendsInfo[].class, "getfriends", name);
+    }
+
+    public PlayerStatistics[] getPlayTimeStatistics(String name) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(PlayerStatistics[].class, "getgodranks", name);
+    }
 }

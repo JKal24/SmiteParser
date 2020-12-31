@@ -3,6 +3,10 @@ package com.astro.smitebasic.objects.gamedata;
 import com.astro.smitebasic.api.Config;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.tomcat.jni.Local;
+
+import java.time.LocalDate;
+import java.util.Objects;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PatchInfo {
@@ -45,5 +49,24 @@ public class PatchInfo {
                 ", version_string='" + version_string + '\'' +
                 ", date='" + date + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PatchInfo)) return false;
+        PatchInfo patchInfo = (PatchInfo) o;
+        // Gets the year, month and day format that the API provides
+        String[] objMoment = patchInfo.date.split(" ")[0].split("/");
+        LocalDate objDate = Config.subtractDays(objMoment[2], objMoment[1], objMoment[0], 0);
+
+        String[] currentMoment = this.date.split(" ")[0].split("/");
+        LocalDate currentDate = Config.subtractDays(currentMoment[2], currentMoment[1], currentMoment[0], 7);
+        return currentDate.isBefore(objDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getRet_msg(), getVersion_string(), date);
     }
 }

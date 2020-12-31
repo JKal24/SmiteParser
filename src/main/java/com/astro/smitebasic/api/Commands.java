@@ -57,9 +57,8 @@ public class Commands {
     }
 
     public String getSessionID() throws NoSuchAlgorithmException {
-        String[] currentTimeStamp = Config.makeSignatureTimeStamp().split(" ");
         for (SessionInfo connection : sessionController.getConnections()) {
-            if (Config.verifySession(currentTimeStamp[0], currentTimeStamp[1], connection.getDate(), connection.getTime()))
+            if (Config.verifySession(connection.getDate(), connection.getTime()))
                 return connection.getSession_id();
             sessionController.deleteConnection(connection);
         }

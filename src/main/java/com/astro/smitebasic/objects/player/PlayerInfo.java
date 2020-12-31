@@ -7,13 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
-@Table(name = "player_info")
 public class PlayerInfo {
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
 
     @JsonProperty("ActivePlayerId")
     private String ActivePlayerId;
@@ -135,7 +129,7 @@ public class PlayerInfo {
 
     public PlayerInfo() { }
 
-    public PlayerInfo(Integer id, String activePlayerId, String created_Datetime, String hoursPlayed, String last_Login_Datetime,
+    public PlayerInfo(String activePlayerId, String created_Datetime, String hoursPlayed, String last_Login_Datetime,
                       String leaves, String level, String losses, String masteryLevel, String mergedPlayers, String minutesPlayed,
                       String name, String personal_Status_Message, String platform, String rank_Stat_Conquest,
                       String rank_Stat_Conquest_Controller, String rank_Stat_Duel, String rank_Stat_duel_Controller, String rank_Stat_Joust,
@@ -143,7 +137,6 @@ public class PlayerInfo {
                       DuelInfo rankedDuel, DuelControllerInfo rankedDuelController, JoustInfo rankedJoust, JoustControllerInfo rankedJoustController,
                       String region, String teamId, String team_Name, String tier_Conquest, String tier_Duel, String tier_Joust,
                       String total_Achievements, String total_Worshippers, String wins, String hz_gamer_tag, String hz_player_name, String ret_msg) {
-        this.id = id;
         ActivePlayerId = activePlayerId;
         Created_Datetime = created_Datetime;
         HoursPlayed = hoursPlayed;
@@ -181,14 +174,6 @@ public class PlayerInfo {
         this.hz_gamer_tag = hz_gamer_tag;
         this.hz_player_name = hz_player_name;
         this.ret_msg = ret_msg;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getActivePlayerId() {

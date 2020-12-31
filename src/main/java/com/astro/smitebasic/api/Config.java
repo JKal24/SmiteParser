@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
@@ -42,9 +43,10 @@ public class Config {
         return String.join("/", components);
     }
 
-    public static boolean verifySession(String currentDate, String currentTime, String pastDate, String pastTime) {
-        if (compareDate(currentDate, pastDate)) {
-            if (compareTime(currentTime, pastTime)) {
+    public static boolean verifySession(String pastDate, String pastTime) {
+        String[] currentTimeStamp = Config.makeSignatureTimeStamp().split(" ");
+        if (compareDate(currentTimeStamp[0], pastDate, 0)) {
+            if (compareTime(currentTimeStamp[1], pastTime, 15)) {
                 return true;
             }
         }
@@ -69,7 +71,12 @@ public class Config {
         return formatterUTC.format(instant);
     }
 
-    public static Boolean compareDate(String currentDate, String pastDate) {
+    private static String makeTimeStamp(LocalDate date, String format) {
+        DateTimeFormatter formatterUTC = DateTimeFormatter.ofPattern(format).withZone(ZoneId.of("UTC"));
+        return date.format(formatterUTC);
+    }
+
+    public static Boolean compareDate(String currentDate, String pastDate, int daysBetween) {
         String[] currentDateArr = currentDate.split("/");
         String[] pastDateArr = pastDate.split("/");
 
@@ -81,11 +88,16 @@ public class Config {
         return true;
     }
 
-    public static Boolean compareTime(String currentTime, String pastTime) {
-        String[] currentTimeArr = sliceTimeArr(currentTime);
+    public static LocalDate subtractDays(String recordedYear, String recordedMonth, String recordedDay, int difference) {
+        LocalDate date = LocalDate.of(Integer.parseInt(recordedYear), Integer.parseInt(recordedMonth), Integer.parseInt(recordedDay));
+        return date.minusDays(difference);
+    }
+
+    public static Boolean compareTime(String currentTime, String pastTime, int timeBetween) {
+        String[] currentTimeArr = sliceTimeArr(currentTime); Config.makeSignatureTimeStamp().split(" ");
         String[] pastTimeArr = sliceTimeArr(pastTime);
 
-        // Check if the last session request sent was less than 15 minutes ago
+        // Check if the last session request sent was less than 'timeBetween' minutes ago
 
         int compareHours = customTimeTrim(pastTimeArr[0]);
         int compareMinutes = customTimeTrim(pastTimeArr[1]);
@@ -93,9 +105,9 @@ public class Config {
         String AMOrPM = customAMOrPM(pastTimeArr[3]);
 
         if (compareMinutes < 45) {
-            compareMinutes += 15;
+            compareMinutes += timeBetween;
         } else {
-            compareMinutes = (compareMinutes + 15) % 60;
+            compareMinutes = (compareMinutes + timeBetween) % 60;
             compareHours = compareHours >= 12 ? compareHours % 12 : compareHours + 1;
         }
 
@@ -136,6 +148,14 @@ public class Config {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,true);
         return mapper.readValue(data, responseType);
+    }
+
+    public static <T> T parseSingleEntry(T[] arr) {
+        return arr[0];
+    }
+
+    public static <T> T parseSingleEntry(T[] arr, int index) {
+        return arr[index];
     }
 
 }
