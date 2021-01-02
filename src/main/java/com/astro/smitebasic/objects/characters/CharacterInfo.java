@@ -1,5 +1,7 @@
 package com.astro.smitebasic.objects.characters;
 
+import com.astro.smitebasic.objects.characters.auxiliary.Ability;
+import com.astro.smitebasic.objects.characters.auxiliary.AbilityDescription;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

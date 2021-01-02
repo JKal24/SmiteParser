@@ -2,16 +2,18 @@ package com.astro.smitebasic.api;
 
 import com.astro.smitebasic.objects.characters.CharacterInfo;
 import com.astro.smitebasic.objects.characters.CharacterNotFoundException;
-import com.astro.smitebasic.objects.characters.leaderboard.LeaderboardInfo;
+import com.astro.smitebasic.objects.characters.auxiliary.LeaderboardInfo;
 import com.astro.smitebasic.objects.gamedata.PatchInfo;
 import com.astro.smitebasic.objects.gamedata.ServerInfo;
 import com.astro.smitebasic.objects.gamedata.UserInfo;
+import com.astro.smitebasic.objects.player.matches.PlayTimeStatistics;
+import com.astro.smitebasic.objects.player.matches.PlayerMatchHistory;
+import com.astro.smitebasic.objects.player.matches.PlayerQueueStatistics;
 import com.astro.smitebasic.objects.items.BaseItemInfo;
 import com.astro.smitebasic.objects.items.RecommendedItemInfo;
-import com.astro.smitebasic.objects.player.FriendsInfo;
-import com.astro.smitebasic.objects.player.PlayerDescription;
-import com.astro.smitebasic.objects.player.PlayerInfo;
-import com.astro.smitebasic.objects.player.PlayerStatistics;
+import com.astro.smitebasic.objects.player.*;
+import com.astro.smitebasic.objects.player.auxiliary.FriendsInfo;
+import com.astro.smitebasic.objects.player.auxiliary.SearchedPlayer;
 import com.astro.smitebasic.utils.Language;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,8 @@ public class SmiteAPI implements CommandLineRunner {
 //            System.out.println(value);
 //        }
 
-        System.out.println(commands.makeRequestCall("getgodranks", mainAccName));
+        System.out.println(commands.makeRequestCall("getdemodetails", "1115618072"));
+        System.out.println(commands.makeRequestCall("getmatchdetails", "1115618072"));
     }
 
     public String getAPIStatus() {
@@ -162,20 +165,44 @@ public class SmiteAPI implements CommandLineRunner {
         return commands.makeRequestCall(PlayerInfo[].class,"getplayer", mainAccName, portalID);
     }
 
-    public PlayerDescription[] getPlayerDescription(String name) throws JsonProcessingException, NoSuchAlgorithmException {
-        return commands.makeRequestCall(PlayerDescription[].class, "getplayeridbyname", name);
+    public PlayerID[] getPlayerID(String name) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(PlayerID[].class, "getplayeridbyname", name);
     }
 
-    public PlayerDescription[] getPlayerDescription(String portalID, String tag, Boolean gamerTag) throws JsonProcessingException, NoSuchAlgorithmException {
-        return gamerTag ? commands.makeRequestCall(PlayerDescription[].class, "getplayeridsbygamertag", portalID, tag) :
-                commands.makeRequestCall(PlayerDescription[].class, "getplayeridbyportaluserid", portalID, tag);
+    public PlayerID[] getPlayerID(String portalID, String tag, Boolean gamerTag) throws JsonProcessingException, NoSuchAlgorithmException {
+        return gamerTag ? commands.makeRequestCall(PlayerID[].class, "getplayeridsbygamertag", portalID, tag) :
+                commands.makeRequestCall(PlayerID[].class, "getplayeridbyportaluserid", portalID, tag);
     }
 
-    public FriendsInfo[] getFriends(String name) throws JsonProcessingException, NoSuchAlgorithmException {
-        return commands.makeRequestCall(FriendsInfo[].class, "getfriends", name);
+    public FriendsInfo[] getFriends(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(FriendsInfo[].class, "getfriends", playerID);
     }
 
-    public PlayerStatistics[] getPlayTimeStatistics(String name) throws JsonProcessingException, NoSuchAlgorithmException {
-        return commands.makeRequestCall(PlayerStatistics[].class, "getgodranks", name);
+    public PlayerStatistics[] getCharacterStatistics(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(PlayerStatistics[].class, "getgodranks", playerID);
     }
+
+    public PlayTimeStatistics[] getPlayTimeStatistics(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(PlayTimeStatistics[].class, "getplayerachievements", playerID);
+    }
+
+    public PlayerStatus[] getPlayerStatus(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(PlayerStatus[].class, "getplayerstatus", playerID);
+    }
+
+    public PlayerMatchHistory[] getMatchHistory(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(PlayerMatchHistory[].class, "getmatchhistory", playerID);
+    }
+
+    public PlayerQueueStatistics[] getPlayerQueueStatistics(String playerID, String modeID) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(PlayerQueueStatistics[].class, "getqueuestats", playerID, modeID);
+    }
+
+    public SearchedPlayer[] getSearchedPlayers(String searchKey) throws JsonProcessingException, NoSuchAlgorithmException {
+        return (Arrays.stream(commands.makeRequestCall(SearchedPlayer[].class, "searchplayers", searchKey))
+                .filter(searchedPlayer -> {
+            return !searchedPlayer.getHzPlayerName().equals(null) && !searchedPlayer.getPlayerName().equals(null);
+        })).toArray(SearchedPlayer[]::new);
+    }
+
 }

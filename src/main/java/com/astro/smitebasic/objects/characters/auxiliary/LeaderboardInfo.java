@@ -1,4 +1,4 @@
-package com.astro.smitebasic.objects.characters.leaderboard;
+package com.astro.smitebasic.objects.characters.auxiliary;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

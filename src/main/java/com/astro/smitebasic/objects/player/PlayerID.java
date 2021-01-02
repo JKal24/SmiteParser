@@ -2,7 +2,7 @@ package com.astro.smitebasic.objects.player;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PlayerDescription {
+public class PlayerID {
 
     @JsonProperty("player_id")
     private Integer playerID;

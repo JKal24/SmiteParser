@@ -1,19 +1,10 @@
-package com.astro.smitebasic.objects.characters.skins;
+package com.astro.smitebasic.objects.characters.auxiliary;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-@Entity
 public class SkinsInfo {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
 
     @JsonProperty("godIcon_URL")
     private String godIcon_URL;
@@ -44,14 +35,6 @@ public class SkinsInfo {
 
     @JsonProperty("skin_name")
     private String skin_name;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public String getGodIcon_URL() {
         return godIcon_URL;

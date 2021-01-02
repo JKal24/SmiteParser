@@ -1,186 +1,131 @@
 package com.astro.smitebasic.objects.player;
 
-import com.astro.smitebasic.objects.player.ranked.*;
+import com.astro.smitebasic.objects.player.matches.GameModeData;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.persistence.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlayerInfo {
 
     @JsonProperty("ActivePlayerId")
-    private String ActivePlayerId;
+    private Integer ActivePlayerId;
 
     @JsonProperty("Created_Datetime")
     private String Created_Datetime;
 
     @JsonProperty("HoursPlayed")
-    private String HoursPlayed;
+    private Integer hoursPlayed;
+
+    @JsonProperty("Id")
+    private Integer id;
 
     @JsonProperty("Last_Login_Datetime")
-    private String Last_Login_Datetime;
+    private String lastLoginDatetime;
 
     @JsonProperty("Leaves")
-    private String Leaves;
+    private Integer leaves;
 
     @JsonProperty("Level")
-    @Column(name = "player_level")
-    private String Level;
+    private Integer Level;
 
     @JsonProperty("Losses")
-    private String Losses;
+    private Integer Losses;
 
     @JsonProperty("MasteryLevel")
-    private String MasteryLevel;
+    private Integer MasteryLevel;
 
     @JsonProperty("MergedPlayers")
-    private String MergedPlayers;
+    private String mergedPlayers;
 
     @JsonProperty("MinutesPlayed")
-    private String MinutesPlayed;
+    private Integer minutesPlayed;
 
     @JsonProperty("Name")
-    private String Name;
+    private String name;
 
     @JsonProperty("Personal_Status_Message")
-    private String Personal_Status_Message;
+    private String personalStatusMessage;
 
     @JsonProperty("Platform")
-    private String Platform;
+    private String platform;
 
     @JsonProperty("Rank_Stat_Conquest")
-    private String Rank_Stat_Conquest;
+    private String rankStatConquest;
 
     @JsonProperty("Rank_Stat_Conquest_Controller")
-    private String Rank_Stat_Conquest_Controller;
+    private String rankStatRank_Stat_Conquest_ControllerGameController;
 
     @JsonProperty("Rank_Stat_Duel")
-    private String Rank_Stat_Duel;
+    private String rankStatDuel;
 
-    @JsonProperty("Rank_Stat_duel_Controller")
-    private String Rank_Stat_duel_Controller;
+    @JsonProperty("Rank_Stat_Duel_Controller")
+    private String rankStatDuelGameController;
 
     @JsonProperty("Rank_Stat_Joust")
-    private String Rank_Stat_Joust;
+    private String rankStatJoust;
 
     @JsonProperty("Rank_Stat_Joust_Controller")
-    private String Rank_Stat_Joust_Controller;
+    private String rankStatJoustGameController;
 
     @JsonProperty("RankedConquest")
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private ConquestInfo RankedConquest;
+    private GameModeData rankedConquest;
 
     @JsonProperty("RankedConquestController")
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private ConquestControllerInfo RankedConquestController;
+    private GameModeData rankedConquestGameController;
 
     @JsonProperty("RankedDuel")
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private DuelInfo RankedDuel;
+    private GameModeData rankedDuel;
 
     @JsonProperty("RankedDuelController")
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private DuelControllerInfo RankedDuelController;
+    private GameModeData rankedDuelGameController;
 
     @JsonProperty("RankedJoust")
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private JoustInfo RankedJoust;
+    private GameModeData rankedJoust;
 
     @JsonProperty("RankedJoustController")
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "info", cascade=CascadeType.ALL)
-    private JoustControllerInfo RankedJoustController;
+    private GameModeData rankedJoustGameController;
 
     @JsonProperty("Region")
-    private String Region;
+    private String region;
 
     @JsonProperty("TeamId")
-    private String TeamId;
+    private Integer teamID;
 
     @JsonProperty("Team_Name")
-    private String Team_Name;
+    private String teamName;
 
     @JsonProperty("Tier_Conquest")
-    private String Tier_Conquest;
+    private String tierConquest;
 
     @JsonProperty("Tier_Duel")
-    private String Tier_Duel;
+    private String tierDuel;
 
     @JsonProperty("Tier_Joust")
-    private String Tier_Joust;
+    private String tierJoust;
 
     @JsonProperty("Total_Achievements")
-    private String Total_Achievements;
+    private Integer totalAchievements;
 
     @JsonProperty("Total_Worshippers")
-    private String Total_Worshippers;
+    private Integer totalWorshippers;
 
     @JsonProperty("Wins")
-    private String Wins;
+    private Integer wins;
 
     @JsonProperty("hz_gamer_tag")
-    private String hz_gamer_tag;
+    private String hzGamerTag;
 
     @JsonProperty("hz_player_name")
-    private String hz_player_name;
+    private String hzPlayerName;
 
     @JsonProperty("ret_msg")
     private String ret_msg;
 
-    public PlayerInfo() { }
-
-    public PlayerInfo(String activePlayerId, String created_Datetime, String hoursPlayed, String last_Login_Datetime,
-                      String leaves, String level, String losses, String masteryLevel, String mergedPlayers, String minutesPlayed,
-                      String name, String personal_Status_Message, String platform, String rank_Stat_Conquest,
-                      String rank_Stat_Conquest_Controller, String rank_Stat_Duel, String rank_Stat_duel_Controller, String rank_Stat_Joust,
-                      String rank_Stat_Joust_Controller, ConquestInfo rankedConquest, ConquestControllerInfo rankedConquestController,
-                      DuelInfo rankedDuel, DuelControllerInfo rankedDuelController, JoustInfo rankedJoust, JoustControllerInfo rankedJoustController,
-                      String region, String teamId, String team_Name, String tier_Conquest, String tier_Duel, String tier_Joust,
-                      String total_Achievements, String total_Worshippers, String wins, String hz_gamer_tag, String hz_player_name, String ret_msg) {
-        ActivePlayerId = activePlayerId;
-        Created_Datetime = created_Datetime;
-        HoursPlayed = hoursPlayed;
-        Last_Login_Datetime = last_Login_Datetime;
-        Leaves = leaves;
-        Level = level;
-        Losses = losses;
-        MasteryLevel = masteryLevel;
-        MergedPlayers = mergedPlayers;
-        MinutesPlayed = minutesPlayed;
-        Name = name;
-        Personal_Status_Message = personal_Status_Message;
-        Platform = platform;
-        Rank_Stat_Conquest = rank_Stat_Conquest;
-        Rank_Stat_Conquest_Controller = rank_Stat_Conquest_Controller;
-        Rank_Stat_Duel = rank_Stat_Duel;
-        Rank_Stat_duel_Controller = rank_Stat_duel_Controller;
-        Rank_Stat_Joust = rank_Stat_Joust;
-        Rank_Stat_Joust_Controller = rank_Stat_Joust_Controller;
-        RankedConquest = rankedConquest;
-        RankedConquestController = rankedConquestController;
-        RankedDuel = rankedDuel;
-        RankedDuelController = rankedDuelController;
-        RankedJoust = rankedJoust;
-        RankedJoustController = rankedJoustController;
-        Region = region;
-        TeamId = teamId;
-        Team_Name = team_Name;
-        Tier_Conquest = tier_Conquest;
-        Tier_Duel = tier_Duel;
-        Tier_Joust = tier_Joust;
-        Total_Achievements = total_Achievements;
-        Total_Worshippers = total_Worshippers;
-        Wins = wins;
-        this.hz_gamer_tag = hz_gamer_tag;
-        this.hz_player_name = hz_player_name;
-        this.ret_msg = ret_msg;
-    }
-
-    public String getActivePlayerId() {
+    public Integer getActivePlayerId() {
         return ActivePlayerId;
     }
 
-    public void setActivePlayerId(String activePlayerId) {
+    public void setActivePlayerId(Integer activePlayerId) {
         ActivePlayerId = activePlayerId;
     }
 
@@ -192,321 +137,334 @@ public class PlayerInfo {
         Created_Datetime = created_Datetime;
     }
 
-    public String getHoursPlayed() {
-        return HoursPlayed;
+    public Integer getHoursPlayed() {
+        return hoursPlayed;
     }
 
-    public void setHoursPlayed(String hoursPlayed) {
-        HoursPlayed = hoursPlayed;
+    public void setHoursPlayed(Integer hoursPlayed) {
+        this.hoursPlayed = hoursPlayed;
     }
 
-    public String getLast_Login_Datetime() {
-        return Last_Login_Datetime;
+    public Integer getId() {
+        return id;
     }
 
-    public void setLast_Login_Datetime(String last_Login_Datetime) {
-        Last_Login_Datetime = last_Login_Datetime;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getLeaves() {
-        return Leaves;
+    public String getLastLoginDatetime() {
+        return lastLoginDatetime;
     }
 
-    public void setLeaves(String leaves) {
-        Leaves = leaves;
+    public void setLastLoginDatetime(String lastLoginDatetime) {
+        this.lastLoginDatetime = lastLoginDatetime;
     }
 
-    public String getLevel() {
+    public Integer getLeaves() {
+        return leaves;
+    }
+
+    public void setLeaves(Integer leaves) {
+        this.leaves = leaves;
+    }
+
+    public Integer getLevel() {
         return Level;
     }
 
-    public void setLevel(String level) {
+    public void setLevel(Integer level) {
         Level = level;
     }
 
-    public String getLosses() {
+    public Integer getLosses() {
         return Losses;
     }
 
-    public void setLosses(String losses) {
+    public void setLosses(Integer losses) {
         Losses = losses;
     }
 
-    public String getMasteryLevel() {
+    public Integer getMasteryLevel() {
         return MasteryLevel;
     }
 
-    public void setMasteryLevel(String masteryLevel) {
+    public void setMasteryLevel(Integer masteryLevel) {
         MasteryLevel = masteryLevel;
     }
 
     public String getMergedPlayers() {
-        return MergedPlayers;
+        return mergedPlayers;
     }
 
     public void setMergedPlayers(String mergedPlayers) {
-        MergedPlayers = mergedPlayers;
+        this.mergedPlayers = mergedPlayers;
     }
 
-    public String getMinutesPlayed() {
-        return MinutesPlayed;
+    public Integer getMinutesPlayed() {
+        return minutesPlayed;
     }
 
-    public void setMinutesPlayed(String minutesPlayed) {
-        MinutesPlayed = minutesPlayed;
+    public void setMinutesPlayed(Integer minutesPlayed) {
+        this.minutesPlayed = minutesPlayed;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
-    public String getPersonal_Status_Message() {
-        return Personal_Status_Message;
+    public String getPersonalStatusMessage() {
+        return personalStatusMessage;
     }
 
-    public void setPersonal_Status_Message(String personal_Status_Message) {
-        Personal_Status_Message = personal_Status_Message;
+    public void setPersonalStatusMessage(String personalStatusMessage) {
+        this.personalStatusMessage = personalStatusMessage;
     }
 
     public String getPlatform() {
-        return Platform;
+        return platform;
     }
 
     public void setPlatform(String platform) {
-        Platform = platform;
+        this.platform = platform;
     }
 
-    public String getRank_Stat_Conquest() {
-        return Rank_Stat_Conquest;
+    public String getRankStatConquest() {
+        return rankStatConquest;
     }
 
-    public void setRank_Stat_Conquest(String rank_Stat_Conquest) {
-        Rank_Stat_Conquest = rank_Stat_Conquest;
+    public void setRankStatConquest(String rankStatConquest) {
+        this.rankStatConquest = rankStatConquest;
     }
 
-    public String getRank_Stat_Conquest_Controller() {
-        return Rank_Stat_Conquest_Controller;
+    public String getRankStatRank_Stat_Conquest_ControllerGameController() {
+        return rankStatRank_Stat_Conquest_ControllerGameController;
     }
 
-    public void setRank_Stat_Conquest_Controller(String rank_Stat_Conquest_Controller) {
-        Rank_Stat_Conquest_Controller = rank_Stat_Conquest_Controller;
+    public void setRankStatRank_Stat_Conquest_ControllerGameController(String rankStatRank_Stat_Conquest_ControllerGameController) {
+        this.rankStatRank_Stat_Conquest_ControllerGameController = rankStatRank_Stat_Conquest_ControllerGameController;
     }
 
-    public String getRank_Stat_Duel() {
-        return Rank_Stat_Duel;
+    public String getRankStatDuel() {
+        return rankStatDuel;
     }
 
-    public void setRank_Stat_Duel(String rank_Stat_Duel) {
-        Rank_Stat_Duel = rank_Stat_Duel;
+    public void setRankStatDuel(String rankStatDuel) {
+        this.rankStatDuel = rankStatDuel;
     }
 
-    public String getRank_Stat_duel_Controller() {
-        return Rank_Stat_duel_Controller;
+    public String getRankStatDuelGameController() {
+        return rankStatDuelGameController;
     }
 
-    public void setRank_Stat_duel_Controller(String rank_Stat_duel_Controller) {
-        Rank_Stat_duel_Controller = rank_Stat_duel_Controller;
+    public void setRankStatDuelGameController(String rankStatDuelGameController) {
+        this.rankStatDuelGameController = rankStatDuelGameController;
     }
 
-    public String getRank_Stat_Joust() {
-        return Rank_Stat_Joust;
+    public String getRankStatJoust() {
+        return rankStatJoust;
     }
 
-    public void setRank_Stat_Joust(String rank_Stat_Joust) {
-        Rank_Stat_Joust = rank_Stat_Joust;
+    public void setRankStatJoust(String rankStatJoust) {
+        this.rankStatJoust = rankStatJoust;
     }
 
-    public String getRank_Stat_Joust_Controller() {
-        return Rank_Stat_Joust_Controller;
+    public String getRankStatJoustGameController() {
+        return rankStatJoustGameController;
     }
 
-    public void setRank_Stat_Joust_Controller(String rank_Stat_Joust_Controller) {
-        Rank_Stat_Joust_Controller = rank_Stat_Joust_Controller;
+    public void setRankStatJoustGameController(String rankStatJoustGameController) {
+        this.rankStatJoustGameController = rankStatJoustGameController;
     }
 
-    public ConquestInfo getRankedConquest() {
-        return RankedConquest;
+    public GameModeData getRankedConquest() {
+        return rankedConquest;
     }
 
-    public void setRankedConquest(ConquestInfo rankedConquest) {
-        RankedConquest = rankedConquest;
+    public void setRankedConquest(GameModeData rankedConquest) {
+        this.rankedConquest = rankedConquest;
     }
 
-    public ConquestControllerInfo getRankedConquestController() {
-        return RankedConquestController;
+    public GameModeData getRankedConquestGameController() {
+        return rankedConquestGameController;
     }
 
-    public void setRankedConquestController(ConquestControllerInfo rankedConquestController) {
-        RankedConquestController = rankedConquestController;
+    public void setRankedConquestGameController(GameModeData rankedConquestGameController) {
+        this.rankedConquestGameController = rankedConquestGameController;
     }
 
-    public DuelInfo getRankedDuel() {
-        return RankedDuel;
+    public GameModeData getRankedDuel() {
+        return rankedDuel;
     }
 
-    public void setRankedDuel(DuelInfo rankedDuel) {
-        RankedDuel = rankedDuel;
+    public void setRankedDuel(GameModeData rankedDuel) {
+        this.rankedDuel = rankedDuel;
     }
 
-    public DuelControllerInfo getRankedDuelController() {
-        return RankedDuelController;
+    public GameModeData getRankedDuelGameController() {
+        return rankedDuelGameController;
     }
 
-    public void setRankedDuelController(DuelControllerInfo rankedDuelController) {
-        RankedDuelController = rankedDuelController;
+    public void setRankedDuelGameController(GameModeData rankedDuelGameController) {
+        this.rankedDuelGameController = rankedDuelGameController;
     }
 
-    public JoustInfo getRankedJoust() {
-        return RankedJoust;
+    public GameModeData getRankedJoust() {
+        return rankedJoust;
     }
 
-    public void setRankedJoust(JoustInfo rankedJoust) {
-        RankedJoust = rankedJoust;
+    public void setRankedJoust(GameModeData rankedJoust) {
+        this.rankedJoust = rankedJoust;
     }
 
-    public JoustControllerInfo getRankedJoustController() {
-        return RankedJoustController;
+    public GameModeData getRankedJoustGameController() {
+        return rankedJoustGameController;
     }
 
-    public void setRankedJoustController(JoustControllerInfo rankedJoustController) {
-        RankedJoustController = rankedJoustController;
+    public void setRankedJoustGameController(GameModeData rankedJoustGameController) {
+        this.rankedJoustGameController = rankedJoustGameController;
     }
 
     public String getRegion() {
-        return Region;
+        return region;
     }
 
     public void setRegion(String region) {
-        Region = region;
+        this.region = region;
     }
 
-    public String getTeamId() {
-        return TeamId;
+    public Integer getTeamID() {
+        return teamID;
     }
 
-    public void setTeamId(String teamId) {
-        TeamId = teamId;
+    public void setTeamID(Integer teamID) {
+        this.teamID = teamID;
     }
 
-    public String getTeam_Name() {
-        return Team_Name;
+    public String getTeamName() {
+        return teamName;
     }
 
-    public void setTeam_Name(String team_Name) {
-        Team_Name = team_Name;
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
     }
 
-    public String getTier_Conquest() {
-        return Tier_Conquest;
+    public String getTierConquest() {
+        return tierConquest;
     }
 
-    public void setTier_Conquest(String tier_Conquest) {
-        Tier_Conquest = tier_Conquest;
+    public void setTierConquest(String tierConquest) {
+        this.tierConquest = tierConquest;
     }
 
-    public String getTier_Duel() {
-        return Tier_Duel;
+    public String getTierDuel() {
+        return tierDuel;
     }
 
-    public void setTier_Duel(String tier_Duel) {
-        Tier_Duel = tier_Duel;
+    public void setTierDuel(String tierDuel) {
+        this.tierDuel = tierDuel;
     }
 
-    public String getTier_Joust() {
-        return Tier_Joust;
+    public String getTierJoust() {
+        return tierJoust;
     }
 
-    public void setTier_Joust(String tier_Joust) {
-        Tier_Joust = tier_Joust;
+    public void setTierJoust(String tierJoust) {
+        this.tierJoust = tierJoust;
     }
 
-    public String getTotal_Achievements() {
-        return Total_Achievements;
+    public Integer getTotalAchievements() {
+        return totalAchievements;
     }
 
-    public void setTotal_Achievements(String total_Achievements) {
-        Total_Achievements = total_Achievements;
+    public void setTotalAchievements(Integer totalAchievements) {
+        this.totalAchievements = totalAchievements;
     }
 
-    public String getTotal_Worshippers() {
-        return Total_Worshippers;
+    public Integer getTotalWorshippers() {
+        return totalWorshippers;
     }
 
-    public void setTotal_Worshippers(String total_Worshippers) {
-        Total_Worshippers = total_Worshippers;
+    public void setTotalWorshippers(Integer totalWorshippers) {
+        this.totalWorshippers = totalWorshippers;
     }
 
-    public String getWins() {
-        return Wins;
+    public Integer getWins() {
+        return wins;
     }
 
-    public void setWins(String wins) {
-        Wins = wins;
+    public void setWins(Integer wins) {
+        this.wins = wins;
     }
 
-    public String getHz_gamer_tag() {
-        return hz_gamer_tag;
+    public String getHzGamerTag() {
+        return hzGamerTag;
     }
 
-    public void setHz_gamer_tag(String hz_gamer_tag) {
-        this.hz_gamer_tag = hz_gamer_tag;
+    public void setHzGamerTag(String hzGamerTag) {
+        this.hzGamerTag = hzGamerTag;
     }
 
-    public String getHz_player_name() {
-        return hz_player_name;
+    public String getHzPlayerName() {
+        return hzPlayerName;
     }
 
-    public void setHz_player_name(String hz_player_name) {
-        this.hz_player_name = hz_player_name;
+    public void setHzPlayerName(String hzPlayerName) {
+        this.hzPlayerName = hzPlayerName;
     }
 
-    public String getRet_msg() { return ret_msg; }
+    public String getRet_msg() {
+        return ret_msg;
+    }
 
-    public void setRet_msg(String ret_msg) { this.ret_msg = ret_msg; }
+    public void setRet_msg(String ret_msg) {
+        this.ret_msg = ret_msg;
+    }
 
     @Override
     public String toString() {
         return "PlayerInfo{" +
-                " ActivePlayerId='" + ActivePlayerId + '\'' +
+                "ActivePlayerId=" + ActivePlayerId +
                 ", Created_Datetime='" + Created_Datetime + '\'' +
-                ", HoursPlayed='" + HoursPlayed + '\'' +
-                ", Last_Login_Datetime='" + Last_Login_Datetime + '\'' +
-                ", Leaves='" + Leaves + '\'' +
-                ", Level='" + Level + '\'' +
-                ", Losses='" + Losses + '\'' +
-                ", MasteryLevel='" + MasteryLevel + '\'' +
-                ", MergedPlayers='" + MergedPlayers + '\'' +
-                ", MinutesPlayed='" + MinutesPlayed + '\'' +
-                ", Name='" + Name + '\'' +
-                ", Personal_Status_Message='" + Personal_Status_Message + '\'' +
-                ", Platform='" + Platform + '\'' +
-                ", Rank_Stat_Conquest='" + Rank_Stat_Conquest + '\'' +
-                ", Rank_Stat_Conquest_Controller='" + Rank_Stat_Conquest_Controller + '\'' +
-                ", Rank_Stat_Duel='" + Rank_Stat_Duel + '\'' +
-                ", Rank_Stat_duel_Controller='" + Rank_Stat_duel_Controller + '\'' +
-                ", Rank_Stat_Joust='" + Rank_Stat_Joust + '\'' +
-                ", Rank_Stat_Joust_Controller='" + Rank_Stat_Joust_Controller + '\'' +
-                ", RankedConquest=" + RankedConquest +
-                ", RankedConquestController=" + RankedConquestController +
-                ", RankedDuel=" + RankedDuel +
-                ", RankedDuelController=" + RankedDuelController +
-                ", RankedJoust=" + RankedJoust +
-                ", RankedJoustController=" + RankedJoustController +
-                ", Region='" + Region + '\'' +
-                ", TeamId='" + TeamId + '\'' +
-                ", Team_Name='" + Team_Name + '\'' +
-                ", Tier_Conquest='" + Tier_Conquest + '\'' +
-                ", Tier_Duel='" + Tier_Duel + '\'' +
-                ", Tier_Joust='" + Tier_Joust + '\'' +
-                ", Total_Achievements='" + Total_Achievements + '\'' +
-                ", Total_Worshippers='" + Total_Worshippers + '\'' +
-                ", Wins='" + Wins + '\'' +
-                ", hz_gamer_tag='" + hz_gamer_tag + '\'' +
-                ", hz_player_name='" + hz_player_name + '\'' +
+                ", hoursPlayed=" + hoursPlayed +
+                ", id=" + id +
+                ", lastLoginDatetime='" + lastLoginDatetime + '\'' +
+                ", leaves=" + leaves +
+                ", Level=" + Level +
+                ", Losses=" + Losses +
+                ", MasteryLevel=" + MasteryLevel +
+                ", mergedPlayers='" + mergedPlayers + '\'' +
+                ", minutesPlayed=" + minutesPlayed +
+                ", name='" + name + '\'' +
+                ", personalStatusMessage='" + personalStatusMessage + '\'' +
+                ", platform='" + platform + '\'' +
+                ", rankStatConquest='" + rankStatConquest + '\'' +
+                ", rankStatRank_Stat_Conquest_ControllerGameController='" + rankStatRank_Stat_Conquest_ControllerGameController + '\'' +
+                ", rankStatDuel='" + rankStatDuel + '\'' +
+                ", rankStatDuelGameController='" + rankStatDuelGameController + '\'' +
+                ", rankStatJoust='" + rankStatJoust + '\'' +
+                ", rankStatJoustGameController='" + rankStatJoustGameController + '\'' +
+                ", rankedConquest=" + rankedConquest +
+                ", rankedConquestGameController=" + rankedConquestGameController +
+                ", rankedDuel=" + rankedDuel +
+                ", rankedDuelGameController=" + rankedDuelGameController +
+                ", rankedJoust=" + rankedJoust +
+                ", rankedJoustGameController=" + rankedJoustGameController +
+                ", region='" + region + '\'' +
+                ", teamID='" + teamID + '\'' +
+                ", teamName='" + teamName + '\'' +
+                ", tierConquest='" + tierConquest + '\'' +
+                ", tierDuel='" + tierDuel + '\'' +
+                ", tierJoust='" + tierJoust + '\'' +
+                ", totalAchievements='" + totalAchievements + '\'' +
+                ", totalWorshippers='" + totalWorshippers + '\'' +
+                ", wins='" + wins + '\'' +
+                ", hzGamerTag='" + hzGamerTag + '\'' +
+                ", hzPlayerName='" + hzPlayerName + '\'' +
                 ", ret_msg='" + ret_msg + '\'' +
                 '}';
     }

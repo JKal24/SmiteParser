@@ -1,4 +1,4 @@
-package com.astro.smitebasic.objects.player;
+package com.astro.smitebasic.objects.player.auxiliary;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
