@@ -1,6 +1,6 @@
 package com.astro.smitebasic.objects.gamedata;
 
-import com.astro.smitebasic.api.Config;
+import com.astro.smitebasic.api.Utils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -31,7 +31,7 @@ public class UserInfo {
     @JsonProperty("ret_msg")
     private String ret_msg;
 
-    private String date = Config.makeRecordTimeStamp();
+    private String date = Utils.makeRecordTimeStamp();
 
     public UserInfo() { }
 

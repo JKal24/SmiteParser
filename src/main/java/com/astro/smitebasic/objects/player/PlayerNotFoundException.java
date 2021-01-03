@@ -1,4 +1,7 @@
 package com.astro.smitebasic.objects.player;
 
-public class PlayerNotFoundException {
+public class PlayerNotFoundException extends NoSuchFieldException {
+    public PlayerNotFoundException(String message) {
+        super(message);
+    }
 }

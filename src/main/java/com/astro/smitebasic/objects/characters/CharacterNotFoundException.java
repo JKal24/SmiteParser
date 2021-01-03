@@ -1,6 +1,6 @@
 package com.astro.smitebasic.objects.characters;
 
-public class CharacterNotFoundException extends NoSuchFieldException{
+public class CharacterNotFoundException extends NoSuchFieldException {
 
     public CharacterNotFoundException() { super(); }
 

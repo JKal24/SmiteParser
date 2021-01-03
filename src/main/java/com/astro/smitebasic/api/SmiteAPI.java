@@ -7,6 +7,7 @@ import com.astro.smitebasic.objects.gamedata.PatchInfo;
 import com.astro.smitebasic.objects.gamedata.ServerInfo;
 import com.astro.smitebasic.objects.gamedata.UserInfo;
 import com.astro.smitebasic.objects.player.matches.PlayTimeStatistics;
+import com.astro.smitebasic.objects.player.matches.PlayerMatchData;
 import com.astro.smitebasic.objects.player.matches.PlayerMatchHistory;
 import com.astro.smitebasic.objects.player.matches.PlayerQueueStatistics;
 import com.astro.smitebasic.objects.items.BaseItemInfo;
@@ -14,7 +15,7 @@ import com.astro.smitebasic.objects.items.RecommendedItemInfo;
 import com.astro.smitebasic.objects.player.*;
 import com.astro.smitebasic.objects.player.auxiliary.FriendsInfo;
 import com.astro.smitebasic.objects.player.auxiliary.SearchedPlayer;
-import com.astro.smitebasic.utils.Language;
+import com.astro.smitebasic.utils.Mode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,39 +41,41 @@ public class SmiteAPI implements CommandLineRunner {
     private Commands commands;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         Integer zkID = 1926;
-//        for (FriendsInfo value : getFriends(mainAccName)) {
+//        for (PlayerInfo value : getPlayer("NOTAREALACCOUNTHAHAHAH49053i05")) {
 //            System.out.println(value);
 //        }
 
-        System.out.println(commands.makeRequestCall("getdemodetails", "1115618072"));
-        System.out.println(commands.makeRequestCall("getmatchdetails", "1115618072"));
+        System.out.println(commands.makeRequestCall("getmatchidsbyqueue", Mode.ARENA.getModeID(), Utils.makeAPIDate(), "3"));
+        System.out.println(commands.makeRequestCall("getmatchdetailsbatch", "1116136956,1116131597,1116125138"));
+        System.out.println(commands.makeRequestCall("getmatchplayerdetails", "1116182420"));
+        System.out.println(commands.makeRequestCall("gettopmatches"));
     }
 
     public String getAPIStatus() {
         return commands.ping();
     }
 
-    public String getSessionStatus() throws NoSuchAlgorithmException, JsonProcessingException {
+    public String getSessionStatus() {
         return commands.makeRequestCall(String.class, "testsession");
     }
 
-    public UserInfo[] getDataUsed() throws NoSuchAlgorithmException, JsonProcessingException {
+    public UserInfo[] getDataUsed() {
         return commands.makeRequestCall(UserInfo[].class, "getdataused");
     }
 
-    public ServerInfo[] getServerStatus() throws NoSuchAlgorithmException, JsonProcessingException {
+    public ServerInfo[] getServerStatus() {
         return commands.makeRequestCall(ServerInfo[].class, "gethirezserverstatus");
     }
 
-    public PatchInfo[] getPatchInfo() throws NoSuchAlgorithmException, JsonProcessingException {
+    public PatchInfo[] getPatchInfo() {
         return commands.makeRequestCall(PatchInfo[].class, "getpatchinfo");
     }
 
-    public CharacterInfo getGod(String name) throws NoSuchAlgorithmException, JsonProcessingException {
+    public CharacterInfo getGod(String name, Integer languageID) {
         try {
-            CharacterInfo[] characters = this.getGods();
+            CharacterInfo[] characters = this.getGods(languageID);
             for (CharacterInfo character : characters) {
                 if (name.equals(character.getName())) {
                     return character;
@@ -85,9 +88,9 @@ public class SmiteAPI implements CommandLineRunner {
         return null;
     }
 
-    public CharacterInfo getGod(Integer ID) throws JsonProcessingException, NoSuchAlgorithmException {
+    public CharacterInfo getGod(Integer ID, Integer languageID) {
         try {
-            CharacterInfo[] characters = this.getGods();
+            CharacterInfo[] characters = this.getGods(languageID);
             for (CharacterInfo character : characters) {
                 if (ID.equals(character.getId())) {
                     return character;
@@ -100,8 +103,8 @@ public class SmiteAPI implements CommandLineRunner {
         return null;
     }
 
-    public CharacterInfo[] getGods(String[] names) throws JsonProcessingException, NoSuchAlgorithmException {
-        CharacterInfo[] characters = this.getGods();
+    public CharacterInfo[] getGods(String[] names, Integer languageID) {
+        CharacterInfo[] characters = this.getGods(languageID);
         List<CharacterInfo> customCharacters = new ArrayList<CharacterInfo>();
         try {
             for (CharacterInfo character : characters) {
@@ -118,21 +121,21 @@ public class SmiteAPI implements CommandLineRunner {
         return customCharacters.toArray(new CharacterInfo[characters.length]);
     }
 
-    public CharacterInfo[] getGods() throws NoSuchAlgorithmException, JsonProcessingException {
-        return commands.makeRequestCall(CharacterInfo[].class, "getgods", Language.ENGLISH.getLanguageID());
+    public CharacterInfo[] getGods(Integer languageID) {
+        return commands.makeRequestCall(CharacterInfo[].class, "getgods", languageID.toString());
     }
 
-    public LeaderboardInfo[] getGodLeaderboard(Integer godID, String mode) throws JsonProcessingException, NoSuchAlgorithmException {
-        return commands.makeRequestCall(LeaderboardInfo[].class, "getgodleaderboard", godID.toString(), mode);
+    public LeaderboardInfo[] getGodLeaderboard(Integer godID, Integer mode) {
+        return commands.makeRequestCall(LeaderboardInfo[].class, "getgodleaderboard", godID.toString(), mode.toString());
     }
 
-    public RecommendedItemInfo[] getGodRecommendedItems(Integer godID, String languageID) throws JsonProcessingException, NoSuchAlgorithmException {
-        return commands.makeRequestCall(RecommendedItemInfo[].class, "getgodrecommendeditems", godID.toString(), languageID);
+    public RecommendedItemInfo[] getGodRecommendedItems(Integer godID, Integer languageID) {
+        return commands.makeRequestCall(RecommendedItemInfo[].class, "getgodrecommendeditems", godID.toString(), languageID.toString());
     }
 
-    public BaseItemInfo getItem(String itemName) throws JsonProcessingException, NoSuchAlgorithmException {
+    public BaseItemInfo getItem(String itemName, Integer languageID) {
         try {
-            BaseItemInfo[] items = this.getItems(Language.ENGLISH.getLanguageID());
+            BaseItemInfo[] items = this.getItems(languageID.toString());
             for (BaseItemInfo item : items) {
                 if (itemName.equals(item.getItemName())) {
                     return item;
@@ -146,63 +149,102 @@ public class SmiteAPI implements CommandLineRunner {
         return null;
     }
 
-    public BaseItemInfo[] getItems(String languageID) throws JsonProcessingException, NoSuchAlgorithmException {
+    public BaseItemInfo[] getItems(String languageID) {
         return commands.makeRequestCall(BaseItemInfo[].class, "getitems", languageID);
     }
 
     // God ID is gathered through accessing god information
-    public String[] getGodSkins(Integer godID) throws NoSuchAlgorithmException, JsonProcessingException {
-        return commands.makeRequestCall(String[].class, "getgodskins", godID.toString(), Language.ENGLISH.getLanguageID());
+    public String[] getGodSkins(Integer godID, Integer languageID) {
+        return commands.makeRequestCall(String[].class, "getgodskins", godID.toString(), languageID.toString());
     }
 
     // Accessed through the player's in game name
-    public PlayerInfo[] getPlayer(String name) throws NoSuchAlgorithmException, JsonProcessingException {
-        return commands.makeRequestCall(PlayerInfo[].class,"getplayer", mainAccName);
+    public PlayerInfo[] getPlayer(String name) {
+        try {
+            PlayerInfo[] playerMatches = commands.makeRequestCall(PlayerInfo[].class, "getplayer", name);
+
+            if (playerMatches.length > 0)
+                return playerMatches;
+            throw new PlayerNotFoundException(String.format("Could not find the player with the name: %s", name));
+        } catch (PlayerNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // Uses 3rd party ID (PS4, XBox, Switch, etc.)
-    public PlayerInfo[] getPlayer(String name, String portalID) throws NoSuchAlgorithmException, JsonProcessingException {
-        return commands.makeRequestCall(PlayerInfo[].class,"getplayer", mainAccName, portalID);
+    public PlayerInfo[] getPlayer(String name, String portalID) {
+        try {
+            PlayerInfo[] playerMatches = commands.makeRequestCall(PlayerInfo[].class,"getplayer", name, portalID);
+
+            if (playerMatches.length > 0)
+                return playerMatches;
+            throw new PlayerNotFoundException(String.format("Could not find the player with the name and portalID: %s, %s", name, portalID));
+        } catch (PlayerNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public PlayerID[] getPlayerID(String name) throws JsonProcessingException, NoSuchAlgorithmException {
-        return commands.makeRequestCall(PlayerID[].class, "getplayeridbyname", name);
+    public PlayerID[] getPlayerID(String name) {
+        try {
+            PlayerID[] playerIDs = commands.makeRequestCall(PlayerID[].class, "getplayeridbyname", name);
+
+            if (playerIDs.length > 0)
+                return playerIDs;
+            throw new PlayerNotFoundException(String.format("Could not find the player's ID, with the name: %s", name));
+        } catch (PlayerNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public PlayerID[] getPlayerID(String portalID, String tag, Boolean gamerTag) throws JsonProcessingException, NoSuchAlgorithmException {
-        return gamerTag ? commands.makeRequestCall(PlayerID[].class, "getplayeridsbygamertag", portalID, tag) :
-                commands.makeRequestCall(PlayerID[].class, "getplayeridbyportaluserid", portalID, tag);
+    public PlayerID[] getPlayerID(String portalID, String tag, Boolean gamerTag) {
+        try {
+            PlayerID[] playerIDs = gamerTag ? commands.makeRequestCall(PlayerID[].class, "getplayeridsbygamertag", portalID, tag) :
+                    commands.makeRequestCall(PlayerID[].class, "getplayeridbyportaluserid", portalID, tag);
+
+            if (playerIDs.length > 0)
+                return playerIDs;
+            throw new PlayerNotFoundException(String.format("Could not find the player's ID, with the portalID and tag: %s, %s", portalID, tag));
+        } catch (PlayerNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public FriendsInfo[] getFriends(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
         return commands.makeRequestCall(FriendsInfo[].class, "getfriends", playerID);
     }
 
-    public PlayerStatistics[] getCharacterStatistics(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+    public PlayerStatistics[] getCharacterStatistics(String playerID) {
         return commands.makeRequestCall(PlayerStatistics[].class, "getgodranks", playerID);
     }
 
-    public PlayTimeStatistics[] getPlayTimeStatistics(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+    public PlayTimeStatistics[] getPlayTimeStatistics(String playerID) {
         return commands.makeRequestCall(PlayTimeStatistics[].class, "getplayerachievements", playerID);
     }
 
-    public PlayerStatus[] getPlayerStatus(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+    public PlayerStatus[] getPlayerStatus(String playerID) {
         return commands.makeRequestCall(PlayerStatus[].class, "getplayerstatus", playerID);
     }
 
-    public PlayerMatchHistory[] getMatchHistory(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+    public PlayerMatchHistory[] getMatchHistory(String playerID) {
         return commands.makeRequestCall(PlayerMatchHistory[].class, "getmatchhistory", playerID);
     }
 
-    public PlayerQueueStatistics[] getPlayerQueueStatistics(String playerID, String modeID) throws JsonProcessingException, NoSuchAlgorithmException {
+    public PlayerQueueStatistics[] getPlayerQueueStatistics(String playerID, String modeID) {
         return commands.makeRequestCall(PlayerQueueStatistics[].class, "getqueuestats", playerID, modeID);
     }
 
-    public SearchedPlayer[] getSearchedPlayers(String searchKey) throws JsonProcessingException, NoSuchAlgorithmException {
+    public SearchedPlayer[] getSearchedPlayers(String searchKey) {
         return (Arrays.stream(commands.makeRequestCall(SearchedPlayer[].class, "searchplayers", searchKey))
                 .filter(searchedPlayer -> {
-            return !searchedPlayer.getHzPlayerName().equals(null) && !searchedPlayer.getPlayerName().equals(null);
+            return searchedPlayer.getHzPlayerName() != null && searchedPlayer.getPlayerName() != null;
         })).toArray(SearchedPlayer[]::new);
     }
 
+    public PlayerMatchData[] getMatchData(Integer matchID) {
+        return commands.makeRequestCall(PlayerMatchData[].class, "getmatchdetails", matchID.toString());
+    }
 }
