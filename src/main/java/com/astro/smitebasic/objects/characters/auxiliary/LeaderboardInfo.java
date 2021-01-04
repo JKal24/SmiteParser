@@ -74,7 +74,7 @@ public class LeaderboardInfo {
 
     @Override
     public String toString() {
-        return "LeaderboardInfo{" +
+        return "LeaderboardRanking{" +
                 "losses=" + losses +
                 ", playerID=" + playerID +
                 ", playerName='" + playerName + '\'' +

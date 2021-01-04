@@ -3,13 +3,10 @@ package com.astro.smitebasic.api;
 import com.astro.smitebasic.objects.characters.CharacterInfo;
 import com.astro.smitebasic.objects.characters.CharacterNotFoundException;
 import com.astro.smitebasic.objects.characters.auxiliary.LeaderboardInfo;
-import com.astro.smitebasic.objects.gamedata.PatchInfo;
-import com.astro.smitebasic.objects.gamedata.ServerInfo;
-import com.astro.smitebasic.objects.gamedata.UserInfo;
-import com.astro.smitebasic.objects.player.matches.PlayTimeStatistics;
-import com.astro.smitebasic.objects.player.matches.PlayerMatchData;
-import com.astro.smitebasic.objects.player.matches.PlayerMatchHistory;
-import com.astro.smitebasic.objects.player.matches.PlayerQueueStatistics;
+import com.astro.smitebasic.objects.gamedata.*;
+import com.astro.smitebasic.objects.gamedata.matches.*;
+import com.astro.smitebasic.objects.player.auxiliary.ClanMemberInfo;
+import com.astro.smitebasic.objects.player.matches.*;
 import com.astro.smitebasic.objects.items.BaseItemInfo;
 import com.astro.smitebasic.objects.items.RecommendedItemInfo;
 import com.astro.smitebasic.objects.player.*;
@@ -42,15 +39,7 @@ public class SmiteAPI implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        Integer zkID = 1926;
-//        for (PlayerInfo value : getPlayer("NOTAREALACCOUNTHAHAHAH49053i05")) {
-//            System.out.println(value);
-//        }
 
-        System.out.println(commands.makeRequestCall("getmatchidsbyqueue", Mode.ARENA.getModeID(), Utils.makeAPIDate(), "3"));
-        System.out.println(commands.makeRequestCall("getmatchdetailsbatch", "1116136956,1116131597,1116125138"));
-        System.out.println(commands.makeRequestCall("getmatchplayerdetails", "1116182420"));
-        System.out.println(commands.makeRequestCall("gettopmatches"));
     }
 
     public String getAPIStatus() {
@@ -73,7 +62,7 @@ public class SmiteAPI implements CommandLineRunner {
         return commands.makeRequestCall(PatchInfo[].class, "getpatchinfo");
     }
 
-    public CharacterInfo getGod(String name, Integer languageID) {
+    public CharacterInfo getGod(String name, String languageID) {
         try {
             CharacterInfo[] characters = this.getGods(languageID);
             for (CharacterInfo character : characters) {
@@ -88,7 +77,7 @@ public class SmiteAPI implements CommandLineRunner {
         return null;
     }
 
-    public CharacterInfo getGod(Integer ID, Integer languageID) {
+    public CharacterInfo getGod(Integer ID, String languageID) {
         try {
             CharacterInfo[] characters = this.getGods(languageID);
             for (CharacterInfo character : characters) {
@@ -103,7 +92,7 @@ public class SmiteAPI implements CommandLineRunner {
         return null;
     }
 
-    public CharacterInfo[] getGods(String[] names, Integer languageID) {
+    public CharacterInfo[] getGods(String[] names, String languageID) {
         CharacterInfo[] characters = this.getGods(languageID);
         List<CharacterInfo> customCharacters = new ArrayList<CharacterInfo>();
         try {
@@ -121,21 +110,21 @@ public class SmiteAPI implements CommandLineRunner {
         return customCharacters.toArray(new CharacterInfo[characters.length]);
     }
 
-    public CharacterInfo[] getGods(Integer languageID) {
-        return commands.makeRequestCall(CharacterInfo[].class, "getgods", languageID.toString());
+    public CharacterInfo[] getGods(String languageID) {
+        return commands.makeRequestCall(CharacterInfo[].class, "getgods", languageID);
     }
 
-    public LeaderboardInfo[] getGodLeaderboard(Integer godID, Integer mode) {
-        return commands.makeRequestCall(LeaderboardInfo[].class, "getgodleaderboard", godID.toString(), mode.toString());
+    public LeaderboardInfo[] getGodLeaderboard(Integer godID, String modeID) {
+        return commands.makeRequestCall(LeaderboardInfo[].class, "getgodleaderboard", godID.toString(), modeID);
     }
 
-    public RecommendedItemInfo[] getGodRecommendedItems(Integer godID, Integer languageID) {
-        return commands.makeRequestCall(RecommendedItemInfo[].class, "getgodrecommendeditems", godID.toString(), languageID.toString());
+    public RecommendedItemInfo[] getGodRecommendedItems(Integer godID, String languageID) {
+        return commands.makeRequestCall(RecommendedItemInfo[].class, "getgodrecommendeditems", godID.toString(), languageID);
     }
 
-    public BaseItemInfo getItem(String itemName, Integer languageID) {
+    public BaseItemInfo getItem(String itemName, String languageID) {
         try {
-            BaseItemInfo[] items = this.getItems(languageID.toString());
+            BaseItemInfo[] items = this.getItems(languageID);
             for (BaseItemInfo item : items) {
                 if (itemName.equals(item.getItemName())) {
                     return item;
@@ -154,8 +143,8 @@ public class SmiteAPI implements CommandLineRunner {
     }
 
     // God ID is gathered through accessing god information
-    public String[] getGodSkins(Integer godID, Integer languageID) {
-        return commands.makeRequestCall(String[].class, "getgodskins", godID.toString(), languageID.toString());
+    public String[] getGodSkins(Integer godID, String languageID) {
+        return commands.makeRequestCall(String[].class, "getgodskins", godID.toString(), languageID);
     }
 
     // Accessed through the player's in game name
@@ -213,28 +202,28 @@ public class SmiteAPI implements CommandLineRunner {
         }
     }
 
-    public FriendsInfo[] getFriends(String playerID) throws JsonProcessingException, NoSuchAlgorithmException {
-        return commands.makeRequestCall(FriendsInfo[].class, "getfriends", playerID);
+    public FriendsInfo[] getFriends(Integer playerID) throws JsonProcessingException, NoSuchAlgorithmException {
+        return commands.makeRequestCall(FriendsInfo[].class, "getfriends", playerID.toString());
     }
 
-    public PlayerStatistics[] getCharacterStatistics(String playerID) {
-        return commands.makeRequestCall(PlayerStatistics[].class, "getgodranks", playerID);
+    public PlayerStatistics[] getCharacterStatistics(Integer playerID) {
+        return commands.makeRequestCall(PlayerStatistics[].class, "getgodranks", playerID.toString());
     }
 
-    public PlayTimeStatistics[] getPlayTimeStatistics(String playerID) {
-        return commands.makeRequestCall(PlayTimeStatistics[].class, "getplayerachievements", playerID);
+    public PlayTimeStatistics[] getPlayTimeStatistics(Integer playerID) {
+        return commands.makeRequestCall(PlayTimeStatistics[].class, "getplayerachievements", playerID.toString());
     }
 
-    public PlayerStatus[] getPlayerStatus(String playerID) {
-        return commands.makeRequestCall(PlayerStatus[].class, "getplayerstatus", playerID);
+    public PlayerStatus[] getPlayerStatus(Integer playerID) {
+        return commands.makeRequestCall(PlayerStatus[].class, "getplayerstatus", playerID.toString());
     }
 
-    public PlayerMatchHistory[] getMatchHistory(String playerID) {
-        return commands.makeRequestCall(PlayerMatchHistory[].class, "getmatchhistory", playerID);
+    public PlayerMatchHistory[] getMatchHistory(Integer playerID) {
+        return commands.makeRequestCall(PlayerMatchHistory[].class, "getmatchhistory", playerID.toString());
     }
 
-    public PlayerQueueStatistics[] getPlayerQueueStatistics(String playerID, String modeID) {
-        return commands.makeRequestCall(PlayerQueueStatistics[].class, "getqueuestats", playerID, modeID);
+    public PlayerQueueStatistics[] getPlayerQueueStatistics(Integer playerID, String modeID) {
+        return commands.makeRequestCall(PlayerQueueStatistics[].class, "getqueuestats", playerID.toString(), modeID);
     }
 
     public SearchedPlayer[] getSearchedPlayers(String searchKey) {
@@ -246,5 +235,71 @@ public class SmiteAPI implements CommandLineRunner {
 
     public PlayerMatchData[] getMatchData(Integer matchID) {
         return commands.makeRequestCall(PlayerMatchData[].class, "getmatchdetails", matchID.toString());
+    }
+
+    // Data will be kept in a map of matchID and playerMatchData, key-value pairs.
+    public MatchData getMultipleMatchData(Integer... matchID) {
+        // Transform matchIDs into strings to be used for HTTP request
+        String[] parseMatchID = Arrays.stream(matchID)
+                .map(Object::toString).toArray(String[]::new);
+
+        // Get data for each match for each player's perspective
+        PlayerMatchData[] allMatchData = commands.makeRequestCall(PlayerMatchData[].class, "getmatchdetailsbatch", String.join(",", parseMatchID));
+        MatchData matchData = new MatchData();
+
+        // For the given match IDs, make a key-value pair
+        for(Integer ID : matchID) {
+            PlayerMatchData[] filteredMatchData = Arrays.stream(allMatchData)
+                    .filter(playerMatchData -> playerMatchData.getMatch().equals(ID)).toArray(PlayerMatchData[]::new);
+
+            matchData.appendMatchData(ID, filteredMatchData);
+        }
+        return matchData;
+    }
+
+    public MatchInfo[] getMatchIDs(String ModeID, Integer hour, Integer minute) {
+        return commands.makeRequestCall(MatchInfo[].class ,"getmatchidsbyqueue",
+                ModeID.toString(), Utils.makeAPIDate(), String.join(",", hour.toString(), minute.toString()));
+    }
+
+    public PlayerLiveMatchData[] getLiveMatchData(Integer liveMatchID) {
+        return commands.makeRequestCall(PlayerLiveMatchData[].class, "getmatchplayerdetails", liveMatchID.toString());
+    }
+
+    public TopMatchInfo[] getTopMatchData() {
+        return commands.makeRequestCall(TopMatchInfo[].class, "gettopmatches");
+    }
+
+    public LeaderboardRanking[] getLeaderboardRankings(String modeID, String rankingID, Integer round) {
+        return commands.makeRequestCall(LeaderboardRanking[].class, "getleagueleaderboard", modeID, rankingID, round.toString());
+    }
+
+    public SeasonInfo[] getLeagueSeasonInfo(String modeID) {
+        return commands.makeRequestCall(SeasonInfo[].class, "getleagueseasons", modeID);
+    }
+
+    public ClanInfo[] getClan(Integer clanID) {
+        return commands.makeRequestCall(ClanInfo[].class, "getteamdetails", clanID.toString());
+    }
+
+    public ClanMemberInfo[] getClanMembers(Integer clanID) {
+        return commands.makeRequestCall(ClanMemberInfo[].class, "getteamplayers", clanID.toString());
+    }
+
+    public ClanInfo[] searchClans(String searchKey) {
+        return commands.makeRequestCall(ClanInfo[].class, "searchteams", searchKey);
+    }
+
+    // Gets the clan ID for the closest search result
+    public Integer getClanID(String searchKey) {
+        return searchClans(searchKey)[0].getTeamID();
+    }
+
+    public MotdInfo[] getMatchOfTheDayHistory() {
+        return commands.makeRequestCall(MotdInfo[].class, "getmotd");
+    }
+
+    public EsportsMatchInfo[] getEsportsMatches() {
+        return commands.makeRequestCall(EsportsMatchInfo[].class, "getesportsproleaguedetails");
     }
 }
