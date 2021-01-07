@@ -1,7 +1,7 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.objects.characters.CharacterInfo;
-import com.astro.smitebasic.objects.characters.CharacterNotFoundException;
+import com.astro.smitebasic.objects.characters.GodInfo;
+import com.astro.smitebasic.objects.characters.GodNotFoundException;
 import com.astro.smitebasic.objects.characters.auxiliary.LeaderboardInfo;
 import com.astro.smitebasic.objects.gamedata.*;
 import com.astro.smitebasic.objects.gamedata.matches.*;
@@ -12,11 +12,8 @@ import com.astro.smitebasic.objects.items.RecommendedItemInfo;
 import com.astro.smitebasic.objects.player.*;
 import com.astro.smitebasic.objects.player.auxiliary.FriendsInfo;
 import com.astro.smitebasic.objects.player.auxiliary.SearchedPlayer;
-import com.astro.smitebasic.utils.Mode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.security.NoSuchAlgorithmException;
@@ -27,20 +24,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Component
-public class SmiteAPI implements CommandLineRunner {
+public class SmiteAPI {
 
     private final static Logger LOGGER = Logger.getLogger(SmiteAPI.class.getName());
 
-    @Value("${smite.acc}")
-    private String mainAccName;
-
     @Autowired
     private Commands commands;
-
-    @Override
-    public void run(String... args) {
-
-    }
 
     public String getAPIStatus() {
         return commands.ping();
@@ -62,56 +51,56 @@ public class SmiteAPI implements CommandLineRunner {
         return commands.makeRequestCall(PatchInfo[].class, "getpatchinfo");
     }
 
-    public CharacterInfo getGod(String name, String languageID) {
+    public GodInfo getGod(String name, String languageID) {
         try {
-            CharacterInfo[] characters = this.getGods(languageID);
-            for (CharacterInfo character : characters) {
+            GodInfo[] characters = this.getGods(languageID);
+            for (GodInfo character : characters) {
                 if (name.equals(character.getName())) {
                     return character;
                 }
             }
-            throw new CharacterNotFoundException();
-        } catch(CharacterNotFoundException e) {
+            throw new GodNotFoundException();
+        } catch(GodNotFoundException e) {
             LOGGER.log(Level.INFO, String.format("Could not find character: %s", name));
         }
         return null;
     }
 
-    public CharacterInfo getGod(Integer ID, String languageID) {
+    public GodInfo getGod(Integer ID, String languageID) {
         try {
-            CharacterInfo[] characters = this.getGods(languageID);
-            for (CharacterInfo character : characters) {
+            GodInfo[] characters = this.getGods(languageID);
+            for (GodInfo character : characters) {
                 if (ID.equals(character.getId())) {
                     return character;
                 }
             }
-            throw new CharacterNotFoundException();
-        } catch(CharacterNotFoundException e) {
+            throw new GodNotFoundException();
+        } catch(GodNotFoundException e) {
             LOGGER.log(Level.INFO, String.format("Could not find character: %s", ID));
         }
         return null;
     }
 
-    public CharacterInfo[] getGods(String[] names, String languageID) {
-        CharacterInfo[] characters = this.getGods(languageID);
-        List<CharacterInfo> customCharacters = new ArrayList<CharacterInfo>();
+    public GodInfo[] getGods(String[] names, String languageID) {
+        GodInfo[] characters = this.getGods(languageID);
+        List<GodInfo> customCharacters = new ArrayList<GodInfo>();
         try {
-            for (CharacterInfo character : characters) {
+            for (GodInfo character : characters) {
                 if (Arrays.stream(names).anyMatch(name -> name.equals(character.getName()))) {
                     customCharacters.add(character);
                 }
             }
             if (customCharacters.size() == 0)
-                throw new CharacterNotFoundException();
-            return customCharacters.toArray(new CharacterInfo[characters.length]);
-        } catch (CharacterNotFoundException e) {
+                throw new GodNotFoundException();
+            return customCharacters.toArray(new GodInfo[characters.length]);
+        } catch (GodNotFoundException e) {
             LOGGER.log(Level.INFO, "Could not find any of the characters provided");
         }
-        return customCharacters.toArray(new CharacterInfo[characters.length]);
+        return customCharacters.toArray(new GodInfo[characters.length]);
     }
 
-    public CharacterInfo[] getGods(String languageID) {
-        return commands.makeRequestCall(CharacterInfo[].class, "getgods", languageID);
+    public GodInfo[] getGods(String languageID) {
+        return commands.makeRequestCall(GodInfo[].class, "getgods", languageID);
     }
 
     public LeaderboardInfo[] getGodLeaderboard(Integer godID, String modeID) {
@@ -130,7 +119,7 @@ public class SmiteAPI implements CommandLineRunner {
                     return item;
                 }
             }
-            throw new CharacterNotFoundException();
+            throw new GodNotFoundException();
         } catch(Exception e) {
             // Implement item exception...
             LOGGER.log(Level.INFO, String.format("Could not find item: %s", itemName));
@@ -238,6 +227,7 @@ public class SmiteAPI implements CommandLineRunner {
     }
 
     // Data will be kept in a map of matchID and playerMatchData, key-value pairs.
+
     public MatchData getMultipleMatchData(Integer... matchID) {
         // Transform matchIDs into strings to be used for HTTP request
         String[] parseMatchID = Arrays.stream(matchID)
@@ -259,7 +249,12 @@ public class SmiteAPI implements CommandLineRunner {
 
     public MatchInfo[] getMatchIDs(String ModeID, Integer hour, Integer minute) {
         return commands.makeRequestCall(MatchInfo[].class ,"getmatchidsbyqueue",
-                ModeID.toString(), Utils.makeAPIDate(), String.join(",", hour.toString(), minute.toString()));
+                ModeID, Utils.makeAPIDate(), String.join(",", hour.toString(), minute.toString()));
+    }
+
+    public MatchInfo[] getMatchIDs(String ModeID, Integer hour) {
+        return commands.makeRequestCall(MatchInfo[].class ,"getmatchidsbyqueue",
+                ModeID, Utils.makeAPIDate(), hour.toString());
     }
 
     public PlayerLiveMatchData[] getLiveMatchData(Integer liveMatchID) {

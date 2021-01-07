@@ -360,7 +360,7 @@ public class PlayerMatchData {
     private Integer winningSide;
 
     @JsonProperty("hasReplay")
-    private Boolean hasReplay;
+    private String hasReplay;
 
     @JsonProperty("hz_gamer_tag")
     private String hzGamerTag;
@@ -1325,12 +1325,12 @@ public class PlayerMatchData {
         this.winningSide = winningSide;
     }
 
-    public Boolean getHasReplay() {
+    public String getHasReplay() {
         return hasReplay;
     }
 
     public void setHasReplay(String hasReplay) {
-        this.hasReplay = hasReplay.equals("y");
+        this.hasReplay = hasReplay;
     }
 
     public String getHzGamerTag() {

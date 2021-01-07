@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CharacterInfo {
+public class GodInfo {
 
     @JsonProperty("Ability1")
     private String ability1Name;
@@ -615,7 +615,7 @@ public class CharacterInfo {
 
     @Override
     public String toString() {
-        return "CharacterInfo{" +
+        return "GodInfo{" +
                 "ability1Name='" + ability1Name + '\'' +
                 ", ability2Name='" + ability2Name + '\'' +
                 ", ability3Name='" + ability3Name + '\'' +

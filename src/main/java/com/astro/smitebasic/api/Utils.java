@@ -130,7 +130,7 @@ public class Utils {
         }
 
         // Compares hours, must be equal after changes and AM or PM
-        if (compareHours == customTimeTrim(currentTimeArr[0]) && AMOrPM.equals(customAMOrPM(currentTimeArr[3]))) {
+        if (compareHours == customTimeTrim(currentTimeArr[0]) % 12 && AMOrPM.equals(customAMOrPM(currentTimeArr[3]))) {
 
             // Evaluate the amount of minutes left before expiring
             if (compareMinutes > customTimeTrim(currentTimeArr[1])) {

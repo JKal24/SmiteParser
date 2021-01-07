@@ -8,11 +8,15 @@ import java.io.IOException;
 public class RequestNotFoundException implements ResponseErrorHandler {
     @Override
     public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
-        return clientHttpResponse.getStatusCode().equals(200);
+        return clientHttpResponse.getStatusCode().is4xxClientError() || clientHttpResponse.getStatusCode().is5xxServerError();
     }
 
     @Override
     public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
-        clientHttpResponse.close();
+        if (clientHttpResponse.getStatusCode().is5xxServerError()) {
+
+        } else if (clientHttpResponse.getStatusCode().is4xxClientError()) {
+
+        }
     }
 }
