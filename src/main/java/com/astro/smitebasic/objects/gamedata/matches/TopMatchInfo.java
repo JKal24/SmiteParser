@@ -7,16 +7,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class TopMatchInfo {
 
     @JsonProperty("Ban1")
-    private Integer ban1;
+    private String ban1;
 
     @JsonProperty("Ban1Id")
-    private String ban1ID;
+    private Integer ban1ID;
 
     @JsonProperty("Ban2")
-    private Integer ban2;
+    private String ban2;
 
     @JsonProperty("Ban2Id")
-    private String ban2ID;
+    private Integer ban2ID;
 
     @JsonProperty("Entry_Datetime")
     private String entryDatetime;
@@ -72,35 +72,35 @@ public class TopMatchInfo {
     @JsonProperty("WinningTeam")
     private Integer winningTeam;
 
-    public Integer getBan1() {
+    public String getBan1() {
         return ban1;
     }
 
-    public void setBan1(Integer ban1) {
+    public void setBan1(String ban1) {
         this.ban1 = ban1;
     }
 
-    public String getBan1ID() {
+    public Integer getBan1ID() {
         return ban1ID;
     }
 
-    public void setBan1ID(String ban1ID) {
+    public void setBan1ID(Integer ban1ID) {
         this.ban1ID = ban1ID;
     }
 
-    public Integer getBan2() {
+    public String getBan2() {
         return ban2;
     }
 
-    public void setBan2(Integer ban2) {
+    public void setBan2(String ban2) {
         this.ban2 = ban2;
     }
 
-    public String getBan2ID() {
+    public Integer getBan2ID() {
         return ban2ID;
     }
 
-    public void setBan2ID(String ban2ID) {
+    public void setBan2ID(Integer ban2ID) {
         this.ban2ID = ban2ID;
     }
 

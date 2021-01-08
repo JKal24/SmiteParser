@@ -2,7 +2,15 @@ package com.astro.smitebasic.objects.player.matches;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.*;
+
+@Entity
+@Table
 public class GameModeData {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Integer id;
 
     @JsonProperty("Leaves")
     private String leaves;

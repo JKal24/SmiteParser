@@ -165,7 +165,7 @@ public class GodInfo {
     private String godIconURL;
 
     @JsonProperty("id")
-    private Integer id;
+    private Integer godID;
 
     @JsonProperty("latestGod")
     private String latestGod;
@@ -589,12 +589,12 @@ public class GodInfo {
         this.godIconURL = godIconURL;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getGodID() {
+        return godID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setGodID(Integer godID) {
+        this.godID = godID;
     }
 
     public String getLatestGod() {
@@ -668,7 +668,7 @@ public class GodInfo {
                 ", basicAttack=" + basicAttack +
                 ", godCardURL='" + godCardURL + '\'' +
                 ", godIconURL='" + godIconURL + '\'' +
-                ", id=" + id +
+                ", id=" + godID +
                 ", latestGod='" + latestGod + '\'' +
                 ", ret_msg='" + ret_msg + '\'' +
                 '}';

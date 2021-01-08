@@ -1,7 +1,9 @@
 package com.astro.smitebasic.objects.items;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Description {
 
     @JsonProperty("Description")

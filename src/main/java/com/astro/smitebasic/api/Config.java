@@ -11,7 +11,7 @@ public class Config {
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder
-                .errorHandler(new RequestNotFoundException())
+                .errorHandler(new ErrorHandlerAPI())
                 .build();
     }
 

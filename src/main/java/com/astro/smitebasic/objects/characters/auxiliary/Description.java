@@ -1,5 +1,8 @@
 package com.astro.smitebasic.objects.characters.auxiliary;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Description {
 
     private String description;

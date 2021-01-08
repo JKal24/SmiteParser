@@ -4,8 +4,18 @@ import com.astro.smitebasic.objects.player.matches.GameModeData;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.*;
+import java.util.List;
+import java.util.Map;
+
+@Entity
+@Table(name = "player_info")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlayerInfo {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Integer id;
 
     @JsonProperty("ActivePlayerId")
     private Integer ActivePlayerId;
@@ -17,7 +27,7 @@ public class PlayerInfo {
     private Integer hoursPlayed;
 
     @JsonProperty("Id")
-    private Integer id;
+    private Integer playerID;
 
     @JsonProperty("Last_Login_Datetime")
     private String lastLoginDatetime;
@@ -66,6 +76,8 @@ public class PlayerInfo {
 
     @JsonProperty("Rank_Stat_Joust_Controller")
     private String rankStatJoustGameController;
+
+    private List<GameModeData> rankedData;
 
     @JsonProperty("RankedConquest")
     private GameModeData rankedConquest;
@@ -145,12 +157,12 @@ public class PlayerInfo {
         this.hoursPlayed = hoursPlayed;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getPlayerID() {
+        return playerID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setPlayerID(Integer playerID) {
+        this.playerID = playerID;
     }
 
     public String getLastLoginDatetime() {
@@ -431,7 +443,7 @@ public class PlayerInfo {
                 "ActivePlayerId=" + ActivePlayerId +
                 ", Created_Datetime='" + Created_Datetime + '\'' +
                 ", hoursPlayed=" + hoursPlayed +
-                ", id=" + id +
+                ", id=" + playerID +
                 ", lastLoginDatetime='" + lastLoginDatetime + '\'' +
                 ", leaves=" + leaves +
                 ", Level=" + Level +

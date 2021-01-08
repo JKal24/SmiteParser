@@ -70,7 +70,7 @@ public class SmiteAPI {
         try {
             GodInfo[] characters = this.getGods(languageID);
             for (GodInfo character : characters) {
-                if (ID.equals(character.getId())) {
+                if (ID.equals(character.getGodID())) {
                     return character;
                 }
             }
@@ -228,14 +228,14 @@ public class SmiteAPI {
 
     // Data will be kept in a map of matchID and playerMatchData, key-value pairs.
 
-    public MatchData getMultipleMatchData(Integer... matchID) {
+    public MultiMatchInfo getMultipleMatchData(Integer... matchID) {
         // Transform matchIDs into strings to be used for HTTP request
         String[] parseMatchID = Arrays.stream(matchID)
                 .map(Object::toString).toArray(String[]::new);
 
         // Get data for each match for each player's perspective
         PlayerMatchData[] allMatchData = commands.makeRequestCall(PlayerMatchData[].class, "getmatchdetailsbatch", String.join(",", parseMatchID));
-        MatchData matchData = new MatchData();
+        MultiMatchInfo matchData = new MultiMatchInfo();
 
         // For the given match IDs, make a key-value pair
         for(Integer ID : matchID) {

@@ -2,16 +2,20 @@ package com.astro.smitebasic.objects.gamedata.matches;
 
 import com.astro.smitebasic.objects.player.matches.PlayerMatchData;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MatchData {
+public class MultiMatchInfo {
 
     private Map<Integer, PlayerMatchData[]> playerMatchDataList;
 
-    public MatchData() {
+    public MultiMatchInfo() {
         this.playerMatchDataList = new HashMap<Integer, PlayerMatchData[]>();
     }
 
@@ -25,7 +29,7 @@ public class MatchData {
 
     @Override
     public String toString() {
-        return "MatchData{" +
+        return "MultiMatchInfo{" +
                 "playerMatchDataList=" + playerMatchDataList.keySet().stream()
                 .map(key -> key + "=" + Arrays.toString(playerMatchDataList.get(key)))
                 .collect(Collectors.joining(", ", "{", "}")) +

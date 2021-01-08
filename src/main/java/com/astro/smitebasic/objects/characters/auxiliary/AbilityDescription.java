@@ -1,8 +1,12 @@
 package com.astro.smitebasic.objects.characters.auxiliary;
 
-import com.astro.smitebasic.objects.characters.auxiliary.Ability;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AbilityDescription {
@@ -11,7 +15,7 @@ public class AbilityDescription {
     private Ability ability;
 
     @JsonProperty("Id")
-    private Integer id;
+    private Integer abilityID;
 
     @JsonProperty("Summary")
     private String summary;
@@ -27,12 +31,12 @@ public class AbilityDescription {
         this.ability = ability;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getAbilityID() {
+        return abilityID;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setAbilityID(Integer abilityID) {
+        this.abilityID = abilityID;
     }
 
     public String getSummary() {
@@ -55,7 +59,7 @@ public class AbilityDescription {
     public String toString() {
         return "AbilityDescription{" +
                 "ability=" + ability +
-                ", id=" + id +
+                ", id=" + abilityID +
                 ", summary='" + summary + '\'' +
                 ", URL='" + URL + '\'' +
                 '}';
