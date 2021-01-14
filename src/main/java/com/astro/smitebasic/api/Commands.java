@@ -4,8 +4,6 @@ import com.astro.smitebasic.objects.session.SessionService;
 import com.astro.smitebasic.objects.session.SessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -25,7 +23,7 @@ public class Commands {
     private String authKey;
 
     @Autowired
-    private SessionService sessionController;
+    private SessionService sessionService;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -50,15 +48,15 @@ public class Commands {
                 Utils.makeSignature("createsession", timeStamp, devID, authKey), timeStamp);
 
         SessionInfo info = template.getForObject(createSessionRequest, SessionInfo.class);
-        sessionController.addConnection(info);
+        sessionService.addConnection(info);
         return info.getSession_id();
     }
 
     public String getSessionID() {
-        for (SessionInfo connection : sessionController.getConnections()) {
+        for (SessionInfo connection : sessionService.getConnections()) {
             if (Utils.verifySession(connection.getDate(), connection.getTime()))
                 return connection.getSession_id();
-            sessionController.deleteConnection(connection);
+            sessionService.deleteConnection(connection);
         }
 
         return createSession(restTemplate);

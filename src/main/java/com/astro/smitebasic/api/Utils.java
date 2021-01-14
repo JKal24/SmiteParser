@@ -122,11 +122,12 @@ public class Utils {
         int compareSeconds = customTimeTrim(pastTimeArr[2]);
         String AMOrPM = customAMOrPM(pastTimeArr[3]);
 
-        if (compareMinutes < 45) {
+        if (compareMinutes < (60 - timeBetween)) {
             compareMinutes += timeBetween;
+            compareHours %= 12;
         } else {
             compareMinutes = (compareMinutes + timeBetween) % 60;
-            compareHours = compareHours >= 12 ? compareHours % 12 : compareHours + 1;
+            compareHours = (compareHours + 1) % 12;
         }
 
         // Compares hours, must be equal after changes and AM or PM
@@ -152,7 +153,7 @@ public class Utils {
     }
 
     private static String customAMOrPM(String time) {
-        return time.replaceAll(".", "").toUpperCase();
+        return time.replaceAll("\\.", "").toUpperCase();
     }
 
     private static Integer customTimeTrim(String timeElement) {
