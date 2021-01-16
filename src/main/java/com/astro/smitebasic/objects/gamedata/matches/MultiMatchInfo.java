@@ -27,6 +27,10 @@ public class MultiMatchInfo {
         playerMatchDataList.put(matchID, playerMatchData);
     }
 
+    public Map<Integer, PlayerMatchData[]> getPlayerMatchDataList() {
+        return playerMatchDataList;
+    }
+
     @Override
     public String toString() {
         return "MultiMatchInfo{" +
