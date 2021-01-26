@@ -16,7 +16,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +32,12 @@ public class SmiteAPI {
 
     @Autowired
     private Commands commands;
+
+    public void setCredentials(String apiUri, String devID, String authKey) {
+        commands.setApiUri(apiUri);
+        commands.setDevID(devID);
+        commands.setAuthKey(authKey);
+    }
 
     public String getAPIStatus() {
         return commands.ping();
@@ -247,14 +255,19 @@ public class SmiteAPI {
         return matchData;
     }
 
-    public MatchInfo[] getMatchIDs(String ModeID, Integer hour, Integer minute) {
+    public MatchInfo[] getMatchIDs(String ModeID, LocalDate date, Integer hour) {
         return commands.makeRequestCall(MatchInfo[].class ,"getmatchidsbyqueue",
-                ModeID, Utils.makeAPIDate(), String.join(",", hour.toString(), minute.toString()));
+                ModeID, Utils.makeAPIDate(date), hour.toString());
     }
 
     public MatchInfo[] getMatchIDs(String ModeID, Integer hour) {
         return commands.makeRequestCall(MatchInfo[].class ,"getmatchidsbyqueue",
                 ModeID, Utils.makeAPIDate(), hour.toString());
+    }
+
+    public MatchInfo[] getMatchIDs(String ModeID, Integer hour, Integer minute) {
+        return commands.makeRequestCall(MatchInfo[].class ,"getmatchidsbyqueue",
+                ModeID, Utils.makeAPIDate(), String.join(",", hour.toString(), minute.toString()));
     }
 
     public PlayerLiveMatchData[] getLiveMatchData(Integer liveMatchID) {

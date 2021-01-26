@@ -68,6 +68,10 @@ public class Utils {
         return makeTimeStamp("yyyyMMdd");
     }
 
+    public static String makeAPIDate(LocalDate date) {
+        return makeTimeStamp(date, "yyyyMMdd");
+    }
+
     public static String makeSignatureTimeStamp() {
         return makeTimeStamp("MM/dd/yyyy HH:mm:ss:a");
     }

@@ -13,13 +13,10 @@ import java.util.stream.Stream;
 
 @Component
 public class Commands {
-    @Value("${smite.api}")
     private String apiUri;
 
-    @Value("${smite.dev-id}")
     private String devID;
 
-    @Value("${smite.auth-key}")
     private String authKey;
 
     @Autowired
@@ -30,7 +27,7 @@ public class Commands {
 
     private final Logger LOGGER = Logger.getLogger(Commands.class.getName());
 
-     // Checks to see if access to the API database is valid
+    // Checks to see if access to the API database is valid
     public String ping() {
         try {
             String pingRequest = Utils.makeRequestUri(apiUri, "pingJson");
@@ -84,5 +81,29 @@ public class Commands {
         );
 
         return restTemplate.getForObject(requestUri, String.class);
+    }
+
+    public String getApiUri() {
+        return apiUri;
+    }
+
+    public void setApiUri(String apiUri) {
+        this.apiUri = apiUri;
+    }
+
+    public String getDevID() {
+        return devID;
+    }
+
+    public void setDevID(String devID) {
+        this.devID = devID;
+    }
+
+    public String getAuthKey() {
+        return authKey;
+    }
+
+    public void setAuthKey(String authKey) {
+        this.authKey = authKey;
     }
 }
