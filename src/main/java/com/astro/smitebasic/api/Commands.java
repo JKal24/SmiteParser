@@ -1,9 +1,9 @@
 package com.astro.smitebasic.api;
 
-import com.astro.smitebasic.objects.session.SessionService;
 import com.astro.smitebasic.objects.session.SessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,8 +22,7 @@ public class Commands {
     @Autowired
     private SessionService sessionService;
 
-    @Autowired
-    private RestTemplate restTemplate;
+    private RestTemplate restTemplate = this.restTemplate(new RestTemplateBuilder());
 
     private final Logger LOGGER = Logger.getLogger(Commands.class.getName());
 
@@ -46,6 +45,7 @@ public class Commands {
 
         SessionInfo info = template.getForObject(createSessionRequest, SessionInfo.class);
         sessionService.addConnection(info);
+        assert info != null;
         return info.getSession_id();
     }
 
@@ -81,6 +81,12 @@ public class Commands {
         );
 
         return restTemplate.getForObject(requestUri, String.class);
+    }
+
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder
+                .errorHandler(new ErrorHandlerAPI())
+                .build();
     }
 
     public String getApiUri() {
