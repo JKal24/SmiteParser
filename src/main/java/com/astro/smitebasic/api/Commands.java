@@ -22,15 +22,13 @@ public class Commands {
     @Autowired
     private SessionService sessionService;
 
-    private RestTemplate restTemplate = this.restTemplate(new RestTemplateBuilder());
-
     private final Logger LOGGER = Logger.getLogger(Commands.class.getName());
 
     // Checks to see if access to the API database is valid
     public String ping() {
         try {
             String pingRequest = Utils.makeRequestUri(apiUri, "pingJson");
-            return restTemplate.getForObject(pingRequest, String.class);
+            return restTemplate(new RestTemplateBuilder()).getForObject(pingRequest, String.class);
         } catch (Exception exception) {
             LOGGER.info("Could not access API");
         }
@@ -56,7 +54,7 @@ public class Commands {
             sessionService.deleteConnection(connection);
         }
 
-        return createSession(restTemplate);
+        return createSession(restTemplate(new RestTemplateBuilder()));
     }
 
     // Makes any API request, requires POJO
@@ -68,7 +66,7 @@ public class Commands {
                         Arrays.stream(additionalParams.clone())).toArray(String[]::new)
         );
 
-        String info = restTemplate.getForObject(requestUri, String.class);
+        String info = restTemplate(new RestTemplateBuilder()).getForObject(requestUri, String.class);
         return Utils.parseJSONData(responseType, info);
     }
 
@@ -80,7 +78,7 @@ public class Commands {
                         Arrays.stream(additionalParams.clone())).toArray(String[]::new)
         );
 
-        return restTemplate.getForObject(requestUri, String.class);
+        return restTemplate(new RestTemplateBuilder()).getForObject(requestUri, String.class);
     }
 
     public RestTemplate restTemplate(RestTemplateBuilder builder) {

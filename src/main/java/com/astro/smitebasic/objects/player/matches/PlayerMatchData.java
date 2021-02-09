@@ -38,6 +38,9 @@ public class PlayerMatchData {
     @JsonProperty("Ban2")
     private String ban2;
 
+    @JsonProperty("Ban2Id")
+    private Integer ban2ID;
+
     @JsonProperty("Ban3Id")
     private Integer ban3ID;
 
@@ -467,6 +470,14 @@ public class PlayerMatchData {
 
     public void setBan2(String ban2) {
         this.ban2 = ban2;
+    }
+
+    public Integer getBan2ID() {
+        return ban2ID;
+    }
+
+    public void setBan2ID(Integer ban2ID) {
+        this.ban2ID = ban2ID;
     }
 
     public Integer getBan3ID() {

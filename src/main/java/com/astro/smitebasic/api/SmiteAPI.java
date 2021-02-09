@@ -147,10 +147,10 @@ public class SmiteAPI {
     // Accessed through the player's in game name
     public PlayerInfo[] getPlayer(String name) {
         try {
-            PlayerInfo[] playerMatches = commands.makeRequestCall(PlayerInfo[].class, "getplayer", name);
+            PlayerInfo[] playerInfos = commands.makeRequestCall(PlayerInfo[].class, "getplayer", name);
 
-            if (playerMatches.length > 0)
-                return playerMatches;
+            if (playerInfos.length > 0)
+                return playerInfos;
             throw new PlayerNotFoundException(String.format("Could not find the player with the name: %s", name));
         } catch (PlayerNotFoundException e) {
             e.printStackTrace();
@@ -161,10 +161,10 @@ public class SmiteAPI {
     // Uses 3rd party ID (PS4, XBox, Switch, etc.)
     public PlayerInfo[] getPlayer(String name, String portalID) {
         try {
-            PlayerInfo[] playerMatches = commands.makeRequestCall(PlayerInfo[].class,"getplayer", name, portalID);
+            PlayerInfo[] playerInfos = commands.makeRequestCall(PlayerInfo[].class,"getplayer", name, portalID);
 
-            if (playerMatches.length > 0)
-                return playerMatches;
+            if (playerInfos.length > 0)
+                return playerInfos;
             throw new PlayerNotFoundException(String.format("Could not find the player with the name and portalID: %s, %s", name, portalID));
         } catch (PlayerNotFoundException e) {
             e.printStackTrace();
@@ -234,7 +234,7 @@ public class SmiteAPI {
         return commands.makeRequestCall(PlayerMatchData[].class, "getmatchdetails", matchID.toString());
     }
 
-    // Data will be kept in a map of matchID and playerMatchData, key-value pairs.
+    // Data will be kept in a map of matchID and playerMatchData key-value pairs.
 
     public MultiMatchInfo getMultipleMatchData(Integer... matchID) {
         // Transform matchIDs into strings to be used for HTTP request
@@ -242,7 +242,8 @@ public class SmiteAPI {
                 .map(Object::toString).toArray(String[]::new);
 
         // Get data for each match for each player's perspective
-        PlayerMatchData[] allMatchData = commands.makeRequestCall(PlayerMatchData[].class, "getmatchdetailsbatch", String.join(",", parseMatchID));
+        PlayerMatchData[] allMatchData = commands.makeRequestCall(PlayerMatchData[].class, "getmatchdetailsbatch",
+                String.join(",", parseMatchID));
         MultiMatchInfo matchData = new MultiMatchInfo();
 
         // For the given match IDs, make a key-value pair

@@ -169,6 +169,7 @@ public class Utils {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
+            T response = mapper.readValue(data, responseType);
             return mapper.readValue(data, responseType);
         } catch (JsonProcessingException e) {
             e.printStackTrace();

@@ -1,8 +1,11 @@
 package com.astro.smitebasic.objects.player;
 
 import com.astro.smitebasic.objects.player.matches.GameModeData;
+import com.astro.smitebasic.objects.player.matches.MergedPlayers;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PlayerInfo {
@@ -35,7 +38,7 @@ public class PlayerInfo {
     private Integer MasteryLevel;
 
     @JsonProperty("MergedPlayers")
-    private String mergedPlayers;
+    private List<MergedPlayers> mergedPlayers;
 
     @JsonProperty("MinutesPlayed")
     private Integer minutesPlayed;
@@ -193,11 +196,11 @@ public class PlayerInfo {
         MasteryLevel = masteryLevel;
     }
 
-    public String getMergedPlayers() {
+    public List<MergedPlayers> getMergedPlayers() {
         return mergedPlayers;
     }
 
-    public void setMergedPlayers(String mergedPlayers) {
+    public void setMergedPlayers(List<MergedPlayers> mergedPlayers) {
         this.mergedPlayers = mergedPlayers;
     }
 
