@@ -5,12 +5,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.lang.reflect.Array;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class Utils {
 
@@ -169,12 +172,23 @@ public class Utils {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-            T response = mapper.readValue(data, responseType);
             return mapper.readValue(data, responseType);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static <T> T[] appendArray(T[] arr1, T[] arr2) {
+        int arr1Len = arr1.length;
+        int arr2Len = arr2.length;
+
+        @SuppressWarnings("unchecked")
+        T[] newArr = (T[]) Array.newInstance(arr1.getClass().getComponentType(), arr1Len + arr2Len);
+        System.arraycopy(arr1, 0, newArr, 0, arr1Len);
+        System.arraycopy(arr2, 0, newArr, arr1Len, arr2Len);
+
+        return newArr;
     }
 
     public static <T> T parseSingleEntry(T[] arr) {

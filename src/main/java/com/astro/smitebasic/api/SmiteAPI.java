@@ -16,7 +16,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -236,24 +235,30 @@ public class SmiteAPI {
 
     // Data will be kept in a map of matchID and playerMatchData key-value pairs.
 
-    public MultiMatchInfo getMultipleMatchData(Integer... matchID) {
+    public List<PlayerMatchData> getMultipleMatchData(Integer... matchID) {
         // Transform matchIDs into strings to be used for HTTP request
         String[] parseMatchID = Arrays.stream(matchID)
                 .map(Object::toString).toArray(String[]::new);
 
         // Get data for each match for each player's perspective
-        PlayerMatchData[] allMatchData = commands.makeRequestCall(PlayerMatchData[].class, "getmatchdetailsbatch",
-                String.join(",", parseMatchID));
-        MultiMatchInfo matchData = new MultiMatchInfo();
+        List<PlayerMatchData> allMatchData = new ArrayList<>();
+        String[] tempIDs = new String[10];
+        int parse = 0;
 
-        // For the given match IDs, make a key-value pair
-        for(Integer ID : matchID) {
-            PlayerMatchData[] filteredMatchData = Arrays.stream(allMatchData)
-                    .filter(playerMatchData -> playerMatchData.getMatch().equals(ID)).toArray(PlayerMatchData[]::new);
+        for (String ID : parseMatchID) {
+            if (parse >= 10) {
+                PlayerMatchData[] tempMatchData = commands.makeRequestCall(PlayerMatchData[].class, "getmatchdetailsbatch",
+                        String.join(",", tempIDs));
+                allMatchData.addAll(Arrays.asList(tempMatchData));
 
-            matchData.appendMatchData(ID, filteredMatchData);
+                tempIDs = new String[10];
+                parse = 0;
+            }
+            tempIDs[parse] = ID;
+            parse++;
         }
-        return matchData;
+
+        return allMatchData;
     }
 
     public MatchInfo[] getMatchIDs(String ModeID, LocalDate date, Integer hour) {
@@ -266,9 +271,14 @@ public class SmiteAPI {
                 ModeID, Utils.makeAPIDate(), hour.toString());
     }
 
-    public MatchInfo[] getMatchIDs(String ModeID, Integer hour, Integer minute) {
+    public MatchInfo[] getMatchIDs(String ModeID, LocalDate date, Integer hour, Integer minutes) {
         return commands.makeRequestCall(MatchInfo[].class ,"getmatchidsbyqueue",
-                ModeID, Utils.makeAPIDate(), String.join(",", hour.toString(), minute.toString()));
+                ModeID, Utils.makeAPIDate(date), String.join(",", hour.toString(), minutes.toString()));
+    }
+
+    public MatchInfo[] getMatchIDs(String ModeID, Integer hour, Integer minutes) {
+        return commands.makeRequestCall(MatchInfo[].class ,"getmatchidsbyqueue",
+                ModeID, Utils.makeAPIDate(), String.join(",", hour.toString(), minutes.toString()));
     }
 
     public PlayerLiveMatchData[] getLiveMatchData(Integer liveMatchID) {

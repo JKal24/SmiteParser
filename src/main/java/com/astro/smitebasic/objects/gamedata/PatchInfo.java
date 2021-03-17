@@ -14,15 +14,15 @@ public class PatchInfo {
     private String ret_msg;
 
     @JsonProperty("version_string")
-    private String version_string;
+    private Double version;
 
     private String date = Utils.makeRecordTimeStamp();
 
     public PatchInfo() { }
 
-    public PatchInfo(String ret_msg, String version_string) {
+    public PatchInfo(String ret_msg, Double version) {
         this.ret_msg = ret_msg;
-        this.version_string = version_string;
+        this.version = version;
     }
 
     public String getRet_msg() {
@@ -33,19 +33,19 @@ public class PatchInfo {
         this.ret_msg = ret_msg;
     }
 
-    public String getVersion_string() {
-        return version_string;
+    public Double getVersion() {
+        return version;
     }
 
-    public void setVersion_string(String version_string) {
-        this.version_string = version_string;
+    public void setVersion(Double version) {
+        this.version = version;
     }
 
     @Override
     public String toString() {
         return "PatchInfo{" +
                 "ret_msg='" + ret_msg + '\'' +
-                ", version_string='" + version_string + '\'' +
+                ", version_string='" + version + '\'' +
                 ", date='" + date + '\'' +
                 '}';
     }
@@ -66,6 +66,6 @@ public class PatchInfo {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getRet_msg(), getVersion_string(), date);
+        return Objects.hash(getRet_msg(), getVersion(), date);
     }
 }
