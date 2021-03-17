@@ -258,6 +258,7 @@ public class SmiteAPI {
             parse++;
         }
 
+        // Similar matches will all be added from every player's perspective.
         return allMatchData;
     }
 
