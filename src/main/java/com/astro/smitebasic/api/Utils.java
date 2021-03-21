@@ -12,21 +12,8 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.stream.Stream;
 
 public class Utils {
-
-    @Value("${smite.api}")
-    private String apiUri;
-
-    @Value("${smite.dev-id}")
-    private String devID;
-
-    @Value("${smite.auth-key}")
-    private String authKey;
-
-    // API Signature with valid devID and authentication key
 
     public static String makeSignature(String request, String time, String devID, String authKey) {
         try {
@@ -54,9 +41,7 @@ public class Utils {
     public static boolean verifySession(String pastDate, String pastTime) {
         String[] currentTimeStamp = Utils.makeSignatureTimeStamp().split(" ");
         if (compareDate(currentTimeStamp[0], pastDate, 0)) {
-            if (compareTime(currentTimeStamp[1], pastTime, 15)) {
-                return true;
-            }
+            return compareTime(currentTimeStamp[1], pastTime, 15);
         }
         return false;
     }
@@ -103,14 +88,20 @@ public class Utils {
 
     public static Boolean compareDate(String currentDate, String pastDate, int daysBetween) {
         String[] currentDateArr = currentDate.split("/");
-        String[] pastDateArr = pastDate.split("/");
+        int currentMonth = getDateAttribute(currentDateArr[0]);
+        int currentDay = getDateAttribute(currentDateArr[1]);
+        int currentYear = getDateAttribute(currentDateArr[2]);
 
-        for (int parse = 0; parse < Math.min(currentDateArr.length, pastDateArr.length); parse++) {
-            if (Integer.parseInt(currentDateArr[parse].replaceFirst("^0+(?!$)", "")) !=
-                    Integer.parseInt(pastDateArr[parse].replaceFirst("^0+(?!$)", "")))
-                return false;
-        }
-        return true;
+        String[] pastDateArr = pastDate.split("/");
+        int pastMonth = getDateAttribute(pastDateArr[0]);
+        int pastDay = getDateAttribute(pastDateArr[1]);
+        int pastYear = getDateAttribute(pastDateArr[2]);
+
+        return pastMonth == currentMonth && pastYear == currentYear && (pastDay + daysBetween) == currentDay;
+    }
+
+    private static int getDateAttribute(String val) {
+        return Integer.parseInt(val.replaceFirst("^0+(?!$)", ""));
     }
 
     public static LocalDate subtractDays(String recordedYear, String recordedMonth, String recordedDay, int difference) {
