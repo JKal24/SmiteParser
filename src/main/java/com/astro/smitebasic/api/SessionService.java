@@ -3,6 +3,7 @@ package com.astro.smitebasic.api;
 import com.astro.smitebasic.objects.session.SessionInfo;
 import com.astro.smitebasic.repositories.SessionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 @Service
