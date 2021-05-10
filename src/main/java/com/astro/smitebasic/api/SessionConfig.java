@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -38,8 +37,8 @@ public class SessionConfig {
         em.setJpaVendorAdapter(vendorAdapter);
 
         HashMap<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
-        properties.put("hibernate.dialect", env.getProperty("hibernate.dialect"));
+        properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
+        properties.put("hibernate.dialect", env.getProperty("datasource.dialect"));
         em.setJpaPropertyMap(properties);
 
         return em;
@@ -49,7 +48,7 @@ public class SessionConfig {
     @ConfigurationProperties("com.astro.smitebasic.objects.session")
     public DataSource sessionDataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl(env.getProperty("session.datasource.url"));
+        dataSource.setUrl(env.getProperty("session.datasource.jdbcUrl"));
         dataSource.setUsername(env.getProperty("datasource.username"));
         dataSource.setPassword(env.getProperty("datasource.password"));
         dataSource.setDriverClassName(env.getProperty("datasource.driverClassName"));

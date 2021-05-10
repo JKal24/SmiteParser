@@ -57,7 +57,7 @@ public class Commands {
     }
 
     // Makes any API request, requires POJO
-    public <T> T makeRequestCall(Class<T> responseType, String request, String... additionalParams) {
+    public <T> T makeRequestCall(Class<T> responseType, String request, String... additionalParams) throws NullPointerException {
         String timestamp = Utils.makeAPITimeStamp();
         String[] initialData = {apiUri, request + "json", devID, Utils.makeSignature(request, timestamp, devID, authKey), getSessionID(), timestamp};
         String requestUri = Utils.makeRequestUri(
@@ -69,7 +69,7 @@ public class Commands {
         return Utils.parseJSONData(responseType, info);
     }
 
-    public String makeRequestCall(String request, String... additionalParams) {
+    public String makeRequestCall(String request, String... additionalParams) throws NullPointerException {
         String timestamp = Utils.makeAPITimeStamp();
         String[] initialData = {apiUri, request + "json", devID, Utils.makeSignature(request, timestamp, devID, authKey), getSessionID(), timestamp};
         String requestUri = Utils.makeRequestUri(

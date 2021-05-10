@@ -1,5 +1,6 @@
 package com.astro.smitebasic.api;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,8 +12,12 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Utils {
+
+    private static final Logger LOGGER = Logger.getLogger(Utils.class.getName());
 
     public static String makeSignature(String request, String time, String devID, String authKey) {
         try {
@@ -163,10 +168,14 @@ public class Utils {
             ObjectMapper mapper = new ObjectMapper();
             mapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
             return mapper.readValue(data, responseType);
-        } catch (JsonProcessingException e) {
+        } catch (JsonParseException e) {
+            LOGGER.log(Level.WARNING, "Encountered a parsing error");
             e.printStackTrace();
-            return null;
+        } catch (JsonProcessingException e1) {
+            LOGGER.log(Level.WARNING, "Encountered a processing error");
+            e1.printStackTrace();
         }
+        throw new NullPointerException();
     }
 
     public static <T> T[] appendArray(T[] arr1, T[] arr2) {
